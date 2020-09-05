@@ -107,7 +107,7 @@ function run() {
             const ktPathExtractedFolder = yield tc.extractZip(ktPath, 'kotlin-compiler');
             console.log(ktPathExtractedFolder);
             exec.exec('find', ['.']);
-            core.addPath(`${ktPathExtractedFolder}/bin`);
+            core.addPath(`${ktPathExtractedFolder}/kotlinc/bin`);
             exec.exec("kotlinc", ["-version"]);
         }
         catch (error) {

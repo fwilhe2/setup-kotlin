@@ -9,7 +9,7 @@ async function run(): Promise<void> {
     const ktPathExtractedFolder = await tc.extractZip(ktPath, 'kotlin-compiler');
     console.log(ktPathExtractedFolder)
     exec.exec('find',['.'])
-    core.addPath(`${ktPathExtractedFolder}/bin`);
+    core.addPath(`${ktPathExtractedFolder}/kotlinc/bin`);
     exec.exec("kotlinc", ["-version"])
   } catch (error) {
     core.setFailed(error.message)
