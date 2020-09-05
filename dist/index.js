@@ -96,19 +96,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(186));
-const tool_cache_1 = __importDefault(__webpack_require__(784));
-const exec_1 = __importDefault(__webpack_require__(514));
+const tc = __importStar(__webpack_require__(784));
+const exec = __importStar(__webpack_require__(514));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const ktPath = yield tool_cache_1.default.downloadTool('https://github.com/JetBrains/kotlin/releases/download/v1.4.0/kotlin-compiler-1.4.0.zip');
-            const ktPathExtractedFolder = yield tool_cache_1.default.extractZip(ktPath, 'kotlin-compiler');
-            exec_1.default.exec(ktPathExtractedFolder + "/bin/kotlinc", ["-version"]);
+            const ktPath = yield tc.downloadTool('https://github.com/JetBrains/kotlin/releases/download/v1.4.0/kotlin-compiler-1.4.0.zip');
+            const ktPathExtractedFolder = yield tc.extractZip(ktPath, 'kotlin-compiler');
+            exec.exec(ktPathExtractedFolder + "/bin/kotlinc", ["-version"]);
         }
         catch (error) {
             core.setFailed(error.message);
