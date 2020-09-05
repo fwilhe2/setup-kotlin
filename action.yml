@@ -2,10 +2,6 @@ name: 'Setup Kotlin'
 description: 'Install the Kotlin compiler'
 author: 'Florian Wilhelm'
 inputs:
-  version: # change this
-    required: false
-    description: 'Kotlin version to use'
-    default: 'latest'
 runs:
   using: 'node12'
   main: 'dist/index.js'
