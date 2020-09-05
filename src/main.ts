@@ -1,16 +1,13 @@
 import * as core from '@actions/core'
+import tc from '@actions/tool-cache';
+import exec from '@actions/exec';
 import {wait} from './wait'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    const ktPath = await tc.downloadTool('https://github.com/JetBrains/kotlin/releases/download/v1.4.0/kotlin-compiler-1.4.0.zip');
+    const ktPathExtractedFolder = await tc.extractZip(ktPath, 'kotlin-compiler');
+    exec.exec(ktPathExtractedFolder + "/bin/kotlinc", ["-version"])
   } catch (error) {
     core.setFailed(error.message)
   }
