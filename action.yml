@@ -1,9 +1,9 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Setup Kotlin'
+description: 'Install the Kotlin compiler'
+author: 'Florian Wilhelm'
 inputs:
   milliseconds: # change this
-    required: true
+    required: false
     description: 'input description here'
     default: 'default value if applicable'
 runs:
