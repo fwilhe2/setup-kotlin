@@ -105,7 +105,8 @@ function run() {
         try {
             const ktPath = yield tc.downloadTool('https://github.com/JetBrains/kotlin/releases/download/v1.4.0/kotlin-compiler-1.4.0.zip');
             const ktPathExtractedFolder = yield tc.extractZip(ktPath, 'kotlin-compiler');
-            exec.exec(ktPathExtractedFolder + "/bin/kotlinc", ["-version"]);
+            core.addPath(`${ktPathExtractedFolder}/bin`);
+            exec.exec("kotlinc", ["-version"]);
         }
         catch (error) {
             core.setFailed(error.message);
