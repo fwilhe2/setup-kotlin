@@ -1,7 +1,7 @@
 {
-  "name": "typescript-action",
+  "name": "setup-kotlin-action",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "description": "TypeScript template action",
   "main": "lib/main.js",
   "scripts": {
@@ -15,14 +15,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/fwilhe2/setup-kotlin.git"
   },
   "keywords": [
     "actions",
     "node",
-    "setup"
+    "setup",
+    "kotlin",
+    "development"
   ],
-  "author": "",
+  "author": "Florian Wilhelm",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.5",
