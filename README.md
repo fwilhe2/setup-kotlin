@@ -21,3 +21,7 @@ jobs:
     - run: kotlinc myProgram.kt -include-runtime -d /tmp/hello.jar; java -jar /tmp/hello.jar
     - run: kotlin myScript.main.kts
 ```
+
+## License
+
+This software is released under the MIT License (MIT), see [LICENSE](./LICENSE) for details.
