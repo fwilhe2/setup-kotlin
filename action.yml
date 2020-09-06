@@ -5,6 +5,9 @@ branding:
   icon: 'code'
   color: 'orange'
 inputs:
+  version:
+    required: false
+    description: 'Version of the compiler to download, defaults to latest'
   script:
     required: false
     description: 'Script to execute'
