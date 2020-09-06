@@ -9,5 +9,5 @@ test('test runs', () => {
   const options: cp.ExecSyncOptions = {
     env: process.env
   }
-  //fixme console.log(cp.execSync(`node ${ip}`, options).toString())
+  console.log(cp.execSync(`node ${ip}`, options).toString())
 })
