@@ -1,6 +1,9 @@
 name: 'Setup Kotlin'
 description: 'Install the Kotlin compiler'
 author: 'Florian Wilhelm'
+branding:
+  icon: 'code'
+  color: 'orange'
 inputs:
   milliseconds: # change this
     required: false
