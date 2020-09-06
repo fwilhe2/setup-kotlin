@@ -3,6 +3,8 @@
 This action downloads the Kotlin compiler and installs it to the path.
 It won't touch the installed JREs.
 
+As of now, it only supports downloading [Kotlin 1.4.0](https://github.com/JetBrains/kotlin/releases/tag/v1.4.0).
+
 It allows you to use the `kotlinc` and the `kotlin` tool to compile source code and run scripts.
 
 Usage example:
