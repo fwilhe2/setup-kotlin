@@ -5,11 +5,11 @@ import * as path from 'path'
 // shows how the runner will run a javascript action with env / stdout protocol
 test('test runs', () => {
   process.env['INPUT_SCRIPT'] = 'println(234234)'
+  process.env['INPUT_VERSION'] = '1.0'
   const ip = path.join(__dirname, '..', 'lib', 'main.js')
   const options: cp.ExecSyncOptions = {
     env: process.env
   }
-  console.log(cp.execSync(`node ${ip}`, options).toString())
   const output = cp.execSync(`node ${ip}`, options).toString().split('\n')
   expect(output[output.length - 2]).toEqual('234234')
 })
