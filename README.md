@@ -24,6 +24,18 @@ jobs:
     - run: kotlin myScript.main.kts
 ```
 
+## Running a script inline
+
+If you provide a string-argument `script`, the action will execute it via [`kotlin-main-kts` script definition jar](https://github.com/Kotlin/kotlin-script-examples/blob/master/jvm/main-kts/MainKts.md), see this example:
+
+```yml
+    - uses: fwilhe2/setup-kotlin@main
+      with:
+        script: |
+            #!/usr/bin/env kotlin
+            //more kotlin script code here
+```
+
 ## License
 
 This software is released under the MIT License (MIT), see [LICENSE](./LICENSE) for details.
