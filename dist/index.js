@@ -110,7 +110,7 @@ function run() {
             exec.exec('kotlinc', ['-version']);
             const script = core.getInput('script');
             if (script) {
-                fs.writeFileSync("script.main.kts", script);
+                fs.writeFileSync('script.main.kts', script);
                 exec.exec('kotlin', ['script.main.kts']);
             }
         }

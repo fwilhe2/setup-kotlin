@@ -14,7 +14,7 @@ async function run(): Promise<void> {
 
     const script = core.getInput('script')
     if (script) {
-      fs.writeFileSync("script.main.kts", script)
+      fs.writeFileSync('script.main.kts', script)
       exec.exec('kotlin', ['script.main.kts'])
     }
   } catch (error) {
