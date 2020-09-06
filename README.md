@@ -1,4 +1,4 @@
-# Setup the [Kotlin](https://kotlinlang.org/) cli compiler in GitHub Actions
+# Setup the [Kotlin™](https://kotlinlang.org/) cli compiler in GitHub Actions
 
 This action downloads the Kotlin compiler and installs it to the path.
 It won't touch the installed JREs.
@@ -35,6 +35,11 @@ If you provide a string-argument `script`, the action will execute it via [`kotl
             #!/usr/bin/env kotlin
             //more kotlin script code here
 ```
+
+## Disclaimer
+
+This software is not affiliated with or endorsed by the owner of the [Kotlin trademark](https://kotlinlang.org/foundation/guidelines.html).
+The trademark is used to describe what this software does.
 
 ## License
 
