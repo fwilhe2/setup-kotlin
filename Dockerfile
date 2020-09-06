@@ -13,4 +13,4 @@ RUN mkdir /code
 
 COPY . /code/
 WORKDIR /code
-RUN npm install; npm run all
+RUN npm install; npm run build; npm run package
