@@ -104,10 +104,7 @@ const fs = __importStar(__webpack_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let version = core.getInput('version');
-            if (!version) {
-                version = '1.4.0';
-            }
+            const version = core.getInput('version');
             let cachedPath = tc.find('kotlin', version);
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
