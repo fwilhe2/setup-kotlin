@@ -10,8 +10,6 @@ RUN apt-get -y update \
 
 RUN mkdir /code
 
-COPY src /code/src
-COPY package.json /code/package.json
-COPY tsconfig.json /code/tsconfig.json
+COPY . /code/
 WORKDIR /code
-RUN npm install; npm run build; npm run package
+RUN npm install; npm run all
