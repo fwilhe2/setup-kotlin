@@ -1,6 +1,7 @@
 FROM node:12-buster
 
 ENV RUNNER_TEMP /tmp
+ENV RUNNER_TOOL_CACHE /tmp
 
 RUN apt-get -y update \
  && apt-get -y dist-upgrade \
@@ -12,4 +13,4 @@ RUN mkdir /code
 
 COPY . /code/
 WORKDIR /code
-RUN npm install; npm run all
+RUN npm install; npm run build; npm run package

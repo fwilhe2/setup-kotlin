@@ -5,11 +5,23 @@ import * as fs from 'fs'
 
 async function run(): Promise<void> {
   try {
-    const ktPath = await tc.downloadTool(
-      'https://github.com/JetBrains/kotlin/releases/download/v1.4.0/kotlin-compiler-1.4.0.zip'
-    )
-    const ktPathExtractedFolder = await tc.extractZip(ktPath)
-    core.addPath(`${ktPathExtractedFolder}/kotlinc/bin`)
+    let version = core.getInput('version')
+    if (!version) {
+      version = '1.4.0'
+    }
+
+    let cachedPath = tc.find('kotlin', version)
+    if (!cachedPath) {
+      core.debug(`Could not find Kotlin ${version} in cache, downloading it.`)
+      const ktPath = await tc.downloadTool(
+        `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`
+      )
+      const ktPathExtractedFolder = await tc.extractZip(ktPath)
+
+      cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
+    }
+
+    core.addPath(`${cachedPath}/kotlinc/bin`)
     exec.exec('kotlinc', ['-version'])
 
     const script = core.getInput('script')

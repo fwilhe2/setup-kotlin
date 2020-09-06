@@ -9,7 +9,6 @@ test('test runs', () => {
   const options: cp.ExecSyncOptions = {
     env: process.env
   }
-  console.log(cp.execSync(`node ${ip}`, options).toString())
   const output = cp.execSync(`node ${ip}`, options).toString().split('\n')
   expect(output[output.length - 2]).toEqual('234234')
 })
