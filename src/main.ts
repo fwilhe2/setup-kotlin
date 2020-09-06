@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
+import * as fs from 'fs'
 
 async function run(): Promise<void> {
   try {
@@ -10,6 +11,12 @@ async function run(): Promise<void> {
     const ktPathExtractedFolder = await tc.extractZip(ktPath)
     core.addPath(`${ktPathExtractedFolder}/kotlinc/bin`)
     exec.exec('kotlinc', ['-version'])
+
+    const script = core.getInput('script')
+    if (script) {
+      fs.writeFileSync('script.main.kts', script)
+      exec.exec('kotlin', ['script.main.kts'])
+    }
   } catch (error) {
     core.setFailed(error.message)
   }

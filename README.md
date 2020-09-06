@@ -1,4 +1,4 @@
-# Setup the [Kotlin](https://kotlinlang.org/) cli compiler in GitHub Actions
+# Setup the [Kotlin™](https://kotlinlang.org/) cli compiler in GitHub Actions
 
 This action downloads the Kotlin compiler and installs it to the path.
 It won't touch the installed JREs.
@@ -23,6 +23,23 @@ jobs:
     - run: kotlinc myProgram.kt -include-runtime -d /tmp/hello.jar; java -jar /tmp/hello.jar
     - run: kotlin myScript.main.kts
 ```
+
+## Running a script inline
+
+If you provide a string-argument `script`, the action will execute it via [`kotlin-main-kts` script definition jar](https://github.com/Kotlin/kotlin-script-examples/blob/master/jvm/main-kts/MainKts.md), see this example:
+
+```yml
+    - uses: fwilhe2/setup-kotlin@main
+      with:
+        script: |
+            #!/usr/bin/env kotlin
+            //more kotlin script code here
+```
+
+## Disclaimer
+
+This software is not affiliated with or endorsed by the owner of the [Kotlin trademark](https://kotlinlang.org/foundation/guidelines.html).
+The trademark is used to describe what this software does.
 
 ## License
 

@@ -5,10 +5,9 @@ branding:
   icon: 'code'
   color: 'orange'
 inputs:
-  milliseconds: # change this
+  script:
     required: false
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Script to execute'
 runs:
   using: 'node12'
   main: 'dist/index.js'
