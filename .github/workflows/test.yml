@@ -53,3 +53,10 @@ jobs:
       - run: |
           docker build . -t devenv
           docker run --rm devenv npm run test && node dist/index.js
+  act:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+      - run: wget https://github.com/fwilhe2/cautious-barnacle/archive/master.zip && unzip master.zip
+      - run: cd cautious-barnacle-master/ && act
