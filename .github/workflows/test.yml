@@ -58,5 +58,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
-      - run: wget https://github.com/fwilhe2/cautious-barnacle/archive/master.zip && unzip master.zip
-      - run: cd cautious-barnacle-master/ && act
+      - run: wget https://github.com/fwilhe2/cautious-barnacle/archive/act.zip && unzip act.zip
+      - run: cd cautious-barnacle-act/ && act
