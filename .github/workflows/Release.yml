@@ -1,0 +1,27 @@
+name: Release
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: release
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Get Version Number
+        id: version
+        run: |
+          npm install semver --quiet
+          echo "::set-output name=number::$(node_modules/.bin/semver -i patch $(curl --silent "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest" | jq -r .tag_name))"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.time.version.number }}
+          release_name: Release ${{ steps.time.version.number }}
+          draft: false
+          prerelease: false
