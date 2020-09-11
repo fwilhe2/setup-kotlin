@@ -1,0 +1,16 @@
+name: Update latest kotlin version
+on:
+  push:
+  workflow_dispatch:
+  repository_dispatch:
+    types: changeme
+  schedule:
+    - cron:  '0 0 * * *'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: test
+      run: |
+        curl https://api.github.com/repos/jetbrains/kotlin/releases/latest
