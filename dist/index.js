@@ -46,13 +46,13 @@ function run() {
             let version = core.getInput('version');
             core.debug(version);
             if (!version) {
-                version = fs.readFileSync('/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/latest_known_version.txt').toString();
+                version = fs.readFileSync('/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/latest_known_version.txt').toString().trim();
                 core.debug(version);
             }
             let cachedPath = tc.find('kotlin', version);
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
-                const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/${version.trim()}/kotlin-compiler-${version.trim().substring(1).trim()}.zip`);
+                const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(1)}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
             }
