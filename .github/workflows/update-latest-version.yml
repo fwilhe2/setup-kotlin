@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: test
       run: |
-        curl https://api.github.com/repos/jetbrains/kotlin/releases/latest | jq --raw-output '.tag_comitish' > latest_known_version.txt
+        curl -u ${{ github.actor }}:${{ secrets.PAT }} https://api.github.com/repos/jetbrains/kotlin/releases/latest | jq --raw-output '.tag_name' > latest_known_version.txt
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
