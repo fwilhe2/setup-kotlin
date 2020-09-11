@@ -16,7 +16,7 @@ async function run(): Promise<void> {
     if (!cachedPath) {
       core.debug(`Could not find Kotlin ${version} in cache, downloading it.`)
       const ktPath = await tc.downloadTool(
-        `https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(1)}.zip`
+        `https://github.com/JetBrains/kotlin/releases/download/${version.trim()}/kotlin-compiler-${version.trim().substring(1)}.zip`
       )
       const ktPathExtractedFolder = await tc.extractZip(ktPath)
 
