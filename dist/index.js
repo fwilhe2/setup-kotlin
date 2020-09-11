@@ -52,7 +52,7 @@ function run() {
             let cachedPath = tc.find('kotlin', version);
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
-                const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(1)}.zip`);
+                const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/${version.trim()}/kotlin-compiler-${version.trim().substring(1).trim()}.zip`);
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
             }
