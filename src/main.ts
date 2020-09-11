@@ -7,7 +7,7 @@ async function run(): Promise<void> {
   try {
     let version = core.getInput('version')
     if (!version) {
-      version = '1.4.0'
+      version = fs.readFileSync('latest_known_version.txt').toString()
     }
 
     let cachedPath = tc.find('kotlin', version)

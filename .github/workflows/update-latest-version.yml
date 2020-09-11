@@ -1,11 +1,8 @@
 name: Update latest kotlin version
 on:
-  push:
   workflow_dispatch:
-  repository_dispatch:
-    types: changeme
   schedule:
-    - cron:  '0 0 * * *'
+    - cron:  '0 0 * * 0'
 jobs:
   build:
     runs-on: ubuntu-latest
