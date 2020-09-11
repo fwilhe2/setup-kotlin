@@ -6,15 +6,17 @@ import * as fs from 'fs'
 async function run(): Promise<void> {
   try {
     let version = core.getInput('version')
+    core.debug(version)
     if (!version) {
       version = fs.readFileSync('latest_known_version.txt').toString()
+      core.debug(version)
     }
 
     let cachedPath = tc.find('kotlin', version)
     if (!cachedPath) {
       core.debug(`Could not find Kotlin ${version} in cache, downloading it.`)
       const ktPath = await tc.downloadTool(
-        `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`
+        `https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(1)}.zip`
       )
       const ktPathExtractedFolder = await tc.extractZip(ktPath)
 

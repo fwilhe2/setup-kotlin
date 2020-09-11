@@ -44,13 +44,15 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let version = core.getInput('version');
+            core.debug(version);
             if (!version) {
-                version = '1.4.0';
+                version = fs.readFileSync('latest_known_version.txt').toString();
+                core.debug(version);
             }
             let cachedPath = tc.find('kotlin', version);
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
-                const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`);
+                const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(1)}.zip`);
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
             }
