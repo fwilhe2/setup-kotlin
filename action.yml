@@ -8,7 +8,6 @@ inputs:
   version:
     required: false
     description: 'Version of the compiler to download, defaults to latest'
-    default: '1.4.0'
   script:
     required: false
     description: 'Script to execute'
