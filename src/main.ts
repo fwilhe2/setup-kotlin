@@ -8,7 +8,7 @@ async function run(): Promise<void> {
     let version = core.getInput('version')
     core.debug(version)
     if (!version) {
-      version = fs.readFileSync('latest_known_version.txt').toString()
+      version = fs.readFileSync('/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/latest_known_version.txt').toString()
       core.debug(version)
     }
 
