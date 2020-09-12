@@ -2,7 +2,6 @@ import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
 import * as fs from 'fs'
-import { env } from 'process'
 
 async function run(): Promise<void> {
   try {
@@ -22,8 +21,8 @@ async function run(): Promise<void> {
       core.debug(`len ${x.length}`)
       if (x.length != 1) {
         core.debug("err")
+        x.forEach(f => {core.debug(f)})
       }
-      x.forEach(f => {core.debug(f)})
       path += x[0]
       
       core.debug(path)

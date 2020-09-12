@@ -59,8 +59,8 @@ function run() {
                 core.debug(`len ${x.length}`);
                 if (x.length != 1) {
                     core.debug("err");
+                    x.forEach(f => { core.debug(f); });
                 }
-                x.forEach(f => { core.debug(f); });
                 path += x[0];
                 core.debug(path);
                 version = fs.readFileSync(`${path}/latest_known_version.txt`).toString().trim();
