@@ -2,6 +2,18 @@ FROM node:12-buster
 
 ENV RUNNER_TEMP /home/runner/work/_temp
 ENV RUNNER_TOOL_CACHE /opt/hostedtoolcache
+ENV GITHUB_WORKSPACE /home/runner/work/cautious-barnacle/cautious-barnacle
+ENV GITHUB_ACTION run3
+ENV GITHUB_RUN_NUMBER 52
+ENV RUNNER_DEBUG 1
+ENV DEPLOYMENT_BASEPATH /opt/runner
+ENV GITHUB_ACTIONS true
+ENV RUNNER_OS Linux
+ENV HOME /home/runner
+ENV GITHUB_API_URL https://api.github.com
+ENV LANG C.UTF-8
+ENV CI true
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -y update \
  && apt-get -y dist-upgrade \
