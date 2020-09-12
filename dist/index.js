@@ -56,9 +56,9 @@ function run() {
                     path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/';
                 }
                 const x = fs.readdirSync(path);
+                core.debug(`len ${x.length}`);
                 if (x.length != 1) {
                     core.debug("err");
-                    core.debug(x.length.toString());
                 }
                 x.forEach(f => { core.debug(f); });
                 path += x[0];
