@@ -9,8 +9,8 @@ RUN apt-get -y update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /code
+RUN mkdir -p /home/runner/work/_actions/fwilhe2/setup-kotlin/main
 
-COPY . /code/
-WORKDIR /code
+COPY . /home/runner/work/_actions/fwilhe2/setup-kotlin/main/
+WORKDIR /home/runner/work/_actions/fwilhe2/setup-kotlin/main
 RUN npm install; npm run build; npm run package

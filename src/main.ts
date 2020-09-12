@@ -2,11 +2,12 @@ import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
 import * as fs from 'fs'
+import { env } from 'process'
 
 async function run(): Promise<void> {
   try {
+    core.debug(process.env.toString())
     let version = core.getInput('version')
-    core.debug(version)
     if (!version) {
       let path = ''
       if (process.platform === 'win32') {
@@ -16,10 +17,7 @@ async function run(): Promise<void> {
       } else {
         path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/'
       }
-      // /Users/runner/work/_actions/fwilhe2/setup-kotlin/0.0.3
-      // D:\a\_actions\fwilhe2\setup-kotlin\0.0.3
       version = fs.readFileSync(`${path}latest_known_version.txt`).toString().trim()
-      core.debug(version)
     }
 
     let cachedPath = tc.find('kotlin', version)

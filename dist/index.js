@@ -43,8 +43,8 @@ const fs = __importStar(__webpack_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            core.debug(process.env.toString());
             let version = core.getInput('version');
-            core.debug(version);
             if (!version) {
                 let path = '';
                 if (process.platform === 'win32') {
@@ -56,10 +56,7 @@ function run() {
                 else {
                     path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/';
                 }
-                // /Users/runner/work/_actions/fwilhe2/setup-kotlin/0.0.3
-                // D:\a\_actions\fwilhe2\setup-kotlin\0.0.3
                 version = fs.readFileSync(`${path}latest_known_version.txt`).toString().trim();
-                core.debug(version);
             }
             let cachedPath = tc.find('kotlin', version);
             if (!cachedPath) {
