@@ -11,19 +11,22 @@ async function run(): Promise<void> {
     if (!version) {
       let path = ''
       if (process.platform === 'win32') {
-          path = 'D:/a/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/'
+          path = 'D:/a/_actions/fwilhe2/setup-kotlin/'
       } else if (process.platform === 'darwin') {
-          path = '/Users/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/'
+          path = '/Users/runner/work/_actions/fwilhe2/setup-kotlin/'
       } else {
-        path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/'
+        path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/'
       }
 
+      const x = fs.readdirSync(path)
+      if (x.length != 1) {
+        core.debug("err")
+      }
+      path += x[0]
+      
+      core.debug(path)
 
-      fs.readdirSync(path).forEach(file => {
-        core.debug(file);
-      });
-
-      version = fs.readFileSync(`${path}latest_known_version.txt`).toString().trim()
+      version = fs.readFileSync(`${path}/latest_known_version.txt`).toString().trim()
     }
 
     let cachedPath = tc.find('kotlin', version)
