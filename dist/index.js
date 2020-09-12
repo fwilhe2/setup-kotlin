@@ -45,12 +45,30 @@ function run() {
         try {
             let version = core.getInput('version');
             if (!version) {
-                version = '1.4.0';
+                let path = '';
+                if (process.platform === 'win32') {
+                    path = 'D:/a/_actions/fwilhe2/setup-kotlin/';
+                }
+                else if (process.platform === 'darwin') {
+                    path = '/Users/runner/work/_actions/fwilhe2/setup-kotlin/';
+                }
+                else {
+                    path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/';
+                }
+                const x = fs.readdirSync(path);
+                core.debug(`len ${x.length}`);
+                if (x.length != 1) {
+                    core.debug("err");
+                    x.forEach(f => { core.debug(f); });
+                }
+                path += x[0];
+                core.debug(path);
+                version = fs.readFileSync(`${path}/latest_known_version.txt`).toString().trim();
             }
             let cachedPath = tc.find('kotlin', version);
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
-                const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`);
+                const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(1)}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
             }

@@ -1,0 +1,19 @@
+name: Update latest kotlin version
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 0 * * 0'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: test
+      run: |
+        curl -u ${{ github.actor }}:${{ secrets.PAT }} https://api.github.com/repos/jetbrains/kotlin/releases/latest | jq --raw-output '.tag_name' > latest_known_version.txt
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+        git add latest_known_version.txt
+        git commit -m "Update latest_known_version.txt"
+        git push
