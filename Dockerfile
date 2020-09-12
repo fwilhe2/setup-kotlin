@@ -22,6 +22,7 @@ RUN mkdir -p /home/runner/work/cautious-barnacle/cautious-barnacle
 
 COPY . /home/runner/work/_actions/fwilhe2/setup-kotlin/main/
 WORKDIR /home/runner/work/_actions/fwilhe2/setup-kotlin/main
+RUN chown -R runner /home/runner
 RUN npm install; npm run build; npm run package
 
 WORKDIR /home/runner/work/cautious-barnacle/cautious-barnacle
