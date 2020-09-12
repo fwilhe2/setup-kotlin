@@ -1,9 +1,10 @@
 # Setup the [Kotlin™](https://kotlinlang.org/) cli compiler in GitHub Actions
 
-This action downloads the Kotlin compiler and installs it to the path.
+This action downloads the Kotlin™ compiler and installs it to the path.
 It won't touch the installed JREs.
 
-As of now, it only supports downloading [Kotlin 1.4.0](https://github.com/JetBrains/kotlin/releases/tag/v1.4.0).
+By default, the latest released version of Kotlin is installed.
+This can be overriden via the `version` flag.
 
 It allows you to use the `kotlinc` and the `kotlin` tool to compile source code and run scripts.
 
@@ -39,7 +40,7 @@ If you provide a string-argument `script`, the action will execute it via [`kotl
 ## Disclaimer
 
 This software is not affiliated with or endorsed by the owner of the [Kotlin trademark](https://kotlinlang.org/foundation/guidelines.html).
-The trademark is used to describe what this software does.
+The name is used to describe what this software does.
 
 ## License
 
