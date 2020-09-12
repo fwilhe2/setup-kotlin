@@ -6,7 +6,7 @@ import { env } from 'process'
 
 async function run(): Promise<void> {
   try {
-    core.debug(process.env.toString())
+
     let version = core.getInput('version')
     if (!version) {
       let path = ''
@@ -17,6 +17,12 @@ async function run(): Promise<void> {
       } else {
         path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/'
       }
+
+
+      fs.readdirSync(path).forEach(file => {
+        core.debug(file);
+      });
+
       version = fs.readFileSync(`${path}latest_known_version.txt`).toString().trim()
     }
 

@@ -43,7 +43,6 @@ const fs = __importStar(__webpack_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            core.debug(process.env.toString());
             let version = core.getInput('version');
             if (!version) {
                 let path = '';
@@ -56,6 +55,9 @@ function run() {
                 else {
                     path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/';
                 }
+                fs.readdirSync(path).forEach(file => {
+                    core.debug(file);
+                });
                 version = fs.readFileSync(`${path}latest_known_version.txt`).toString().trim();
             }
             let cachedPath = tc.find('kotlin', version);
