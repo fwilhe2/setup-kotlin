@@ -8,7 +8,17 @@ async function run(): Promise<void> {
     let version = core.getInput('version')
     core.debug(version)
     if (!version) {
-      version = fs.readFileSync('/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/latest_known_version.txt').toString().trim()
+      let path = ''
+      if (process.platform === 'win32') {
+          path = 'D:/a/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/'
+      } else if (process.platform === 'darwin') {
+          path = '/Users/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/'
+      } else {
+        path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/Update-latest-kotlin-version/'
+      }
+      // /Users/runner/work/_actions/fwilhe2/setup-kotlin/0.0.3
+      // D:\a\_actions\fwilhe2\setup-kotlin\0.0.3
+      version = fs.readFileSync(`${path}latest_known_version.txt`).toString().trim()
       core.debug(version)
     }
 
