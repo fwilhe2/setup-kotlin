@@ -59,16 +59,18 @@ function run() {
                 let path = pathOfLatestVersionFile();
                 const x = fs.readdirSync(path);
                 core.debug(`len ${x.length}`);
-                if (x.length != 1) {
-                    core.debug("err");
-                    x.forEach(f => { core.debug(f); });
+                if (x.length !== 1) {
+                    core.debug(`${x} has ${x.length} items, expected one. Assuming ${x[0]} is correct.`);
                 }
                 path += x[0];
                 core.debug(path.toString());
                 if (fs.existsSync(path)) {
                     const filePath = `${path}/latest_known_version.txt`;
                     if (fs.existsSync(filePath)) {
-                        version = fs.readFileSync(`${path}/latest_known_version.txt`).toString().trim();
+                        version = fs
+                            .readFileSync(`${path}/latest_known_version.txt`)
+                            .toString()
+                            .trim();
                     }
                 }
             }
