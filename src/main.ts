@@ -2,32 +2,45 @@ import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
 import * as fs from 'fs'
+import { isObject } from 'util'
+
+
+function pathOfLatestVersionFile(): fs.PathLike {
+  if (process.platform === 'win32') {
+    return 'D:/a/_actions/fwilhe2/setup-kotlin/'
+  } else if (process.platform === 'darwin') {
+    return '/Users/runner/work/_actions/fwilhe2/setup-kotlin/'
+  } else {
+    return '/home/runner/work/_actions/fwilhe2/setup-kotlin/'
+  }
+}
 
 async function run(): Promise<void> {
   try {
 
     let version = core.getInput('version')
     if (!version) {
-      let path = ''
-      if (process.platform === 'win32') {
-          path = 'D:/a/_actions/fwilhe2/setup-kotlin/'
-      } else if (process.platform === 'darwin') {
-          path = '/Users/runner/work/_actions/fwilhe2/setup-kotlin/'
-      } else {
-        path = '/home/runner/work/_actions/fwilhe2/setup-kotlin/'
-      }
+      let path = pathOfLatestVersionFile()
 
       const x = fs.readdirSync(path)
       core.debug(`len ${x.length}`)
       if (x.length != 1) {
         core.debug("err")
-        x.forEach(f => {core.debug(f)})
+        x.forEach(f => { core.debug(f) })
       }
       path += x[0]
-      
-      core.debug(path)
 
-      version = fs.readFileSync(`${path}/latest_known_version.txt`).toString().trim()
+      core.debug(path.toString())
+
+      if(fs.existsSync(path)) {
+          const filePath = `${path}/latest_known_version.txt`
+          if (fs.existsSync(filePath)) {
+            version = fs.readFileSync(`${path}/latest_known_version.txt`).toString().trim()
+          }
+      }
+    }
+    if (!version) {
+      version = 'v1.4.0'
     }
 
     let cachedPath = tc.find('kotlin', version)
