@@ -3,54 +3,18 @@ import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
 import * as fs from 'fs'
 
-function pathOfLatestVersionFile(): fs.PathLike {
-  if (process.platform === 'win32') {
-    return 'D:/a/_actions/fwilhe2/setup-kotlin/'
-  } else if (process.platform === 'darwin') {
-    return '/Users/runner/work/_actions/fwilhe2/setup-kotlin/'
-  } else {
-    return '/home/runner/work/_actions/fwilhe2/setup-kotlin/'
-  }
-}
+const IS_WINDOWS = process.platform === 'win32'
+const IS_DARWIN = process.platform === 'darwin'
 
 async function run(): Promise<void> {
   try {
-    let version = core.getInput('version')
-    if (!version) {
-      let path = pathOfLatestVersionFile()
-
-      const x = fs.readdirSync(path)
-      core.debug(`len ${x.length}`)
-      if (x.length !== 1) {
-        core.debug(
-          `${x} has ${x.length} items, expected one. Assuming ${x[0]} is correct.`
-        )
-      }
-      path += x[0]
-
-      core.debug(path.toString())
-
-      if (fs.existsSync(path)) {
-        const filePath = `${path}/latest_known_version.txt`
-        if (fs.existsSync(filePath)) {
-          version = fs
-            .readFileSync(`${path}/latest_known_version.txt`)
-            .toString()
-            .trim()
-        }
-      }
-    }
-    if (!version) {
-      version = 'v1.4.0'
-    }
+    const version = getKotlinVersion(core.getInput('version'))
 
     let cachedPath = tc.find('kotlin', version)
     if (!cachedPath) {
       core.debug(`Could not find Kotlin ${version} in cache, downloading it.`)
       const ktPath = await tc.downloadTool(
-        `https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(
-          1
-        )}.zip`.replace('\n', '')
+        `https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(1)}.zip`.replace('\n', '')
       )
       const ktPathExtractedFolder = await tc.extractZip(ktPath)
 
@@ -58,7 +22,7 @@ async function run(): Promise<void> {
     }
 
     core.addPath(`${cachedPath}/kotlinc/bin`)
-    exec.exec('kotlinc', ['-version'])
+    await exec.exec('kotlinc', ['-version'])
 
     const script = core.getInput('script')
     if (script) {
@@ -71,3 +35,41 @@ async function run(): Promise<void> {
 }
 
 run()
+
+export function getKotlinVersion(version: string): string {
+  if (!version) {
+    let directoryOfLatestVersionFile = pathOfLatestVersionFile()
+
+    if (fs.existsSync(directoryOfLatestVersionFile)) {
+      const elementsInDirectory = fs.readdirSync(directoryOfLatestVersionFile)
+      core.debug(`len ${elementsInDirectory.length}`)
+      if (elementsInDirectory.length !== 1) {
+        core.debug(
+          `${directoryOfLatestVersionFile} has ${elementsInDirectory.length} items, expected one. Assuming ${elementsInDirectory[0]} is correct.`
+        )
+      }
+      directoryOfLatestVersionFile += elementsInDirectory[0]
+
+      core.debug(directoryOfLatestVersionFile.toString())
+
+      const filePath = `${directoryOfLatestVersionFile}/latest_known_version.txt`
+      if (fs.existsSync(filePath)) {
+        version = fs.readFileSync(`${directoryOfLatestVersionFile}/latest_known_version.txt`).toString().trim()
+      }
+    }
+  }
+  if (!version) {
+    version = 'v1.4.0'
+  }
+  return version
+}
+
+export function pathOfLatestVersionFile(): fs.PathLike {
+  if (IS_WINDOWS) {
+    return 'D:/a/_actions/fwilhe2/setup-kotlin/'
+  } else if (IS_DARWIN) {
+    return '/Users/runner/work/_actions/fwilhe2/setup-kotlin/'
+  } else {
+    return '/home/runner/work/_actions/fwilhe2/setup-kotlin/'
+  }
+}

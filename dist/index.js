@@ -36,47 +36,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.pathOfLatestVersionFile = exports.getKotlinVersion = void 0;
 const core = __importStar(__webpack_require__(186));
 const tc = __importStar(__webpack_require__(784));
 const exec = __importStar(__webpack_require__(514));
 const fs = __importStar(__webpack_require__(747));
-function pathOfLatestVersionFile() {
-    if (process.platform === 'win32') {
-        return 'D:/a/_actions/fwilhe2/setup-kotlin/';
-    }
-    else if (process.platform === 'darwin') {
-        return '/Users/runner/work/_actions/fwilhe2/setup-kotlin/';
-    }
-    else {
-        return '/home/runner/work/_actions/fwilhe2/setup-kotlin/';
-    }
-}
+const IS_WINDOWS = process.platform === 'win32';
+const IS_DARWIN = process.platform === 'darwin';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let version = core.getInput('version');
-            if (!version) {
-                let path = pathOfLatestVersionFile();
-                const x = fs.readdirSync(path);
-                core.debug(`len ${x.length}`);
-                if (x.length !== 1) {
-                    core.debug(`${x} has ${x.length} items, expected one. Assuming ${x[0]} is correct.`);
-                }
-                path += x[0];
-                core.debug(path.toString());
-                if (fs.existsSync(path)) {
-                    const filePath = `${path}/latest_known_version.txt`;
-                    if (fs.existsSync(filePath)) {
-                        version = fs
-                            .readFileSync(`${path}/latest_known_version.txt`)
-                            .toString()
-                            .trim();
-                    }
-                }
-            }
-            if (!version) {
-                version = 'v1.4.0';
-            }
+            const version = getKotlinVersion(core.getInput('version'));
             let cachedPath = tc.find('kotlin', version);
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
@@ -85,7 +55,7 @@ function run() {
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
             }
             core.addPath(`${cachedPath}/kotlinc/bin`);
-            exec.exec('kotlinc', ['-version']);
+            yield exec.exec('kotlinc', ['-version']);
             const script = core.getInput('script');
             if (script) {
                 fs.writeFileSync('script.main.kts', script);
@@ -98,6 +68,41 @@ function run() {
     });
 }
 run();
+function getKotlinVersion(version) {
+    if (!version) {
+        let directoryOfLatestVersionFile = pathOfLatestVersionFile();
+        if (fs.existsSync(directoryOfLatestVersionFile)) {
+            const elementsInDirectory = fs.readdirSync(directoryOfLatestVersionFile);
+            core.debug(`len ${elementsInDirectory.length}`);
+            if (elementsInDirectory.length !== 1) {
+                core.debug(`${directoryOfLatestVersionFile} has ${elementsInDirectory.length} items, expected one. Assuming ${elementsInDirectory[0]} is correct.`);
+            }
+            directoryOfLatestVersionFile += elementsInDirectory[0];
+            core.debug(directoryOfLatestVersionFile.toString());
+            const filePath = `${directoryOfLatestVersionFile}/latest_known_version.txt`;
+            if (fs.existsSync(filePath)) {
+                version = fs.readFileSync(`${directoryOfLatestVersionFile}/latest_known_version.txt`).toString().trim();
+            }
+        }
+    }
+    if (!version) {
+        version = 'v1.4.0';
+    }
+    return version;
+}
+exports.getKotlinVersion = getKotlinVersion;
+function pathOfLatestVersionFile() {
+    if (IS_WINDOWS) {
+        return 'D:/a/_actions/fwilhe2/setup-kotlin/';
+    }
+    else if (IS_DARWIN) {
+        return '/Users/runner/work/_actions/fwilhe2/setup-kotlin/';
+    }
+    else {
+        return '/home/runner/work/_actions/fwilhe2/setup-kotlin/';
+    }
+}
+exports.pathOfLatestVersionFile = pathOfLatestVersionFile;
 
 
 /***/ }),
