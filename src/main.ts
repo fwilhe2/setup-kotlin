@@ -14,7 +14,7 @@ async function run(): Promise<void> {
     if (!cachedPath) {
       core.debug(`Could not find Kotlin ${version} in cache, downloading it.`)
       const ktPath = await tc.downloadTool(
-        `https://github.com/JetBrains/kotlin/releases/download/${version}/kotlin-compiler-${version.substring(1)}.zip`.replace('\n', '')
+        `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', '')
       )
       const ktPathExtractedFolder = await tc.extractZip(ktPath)
 
@@ -59,7 +59,10 @@ export function getKotlinVersion(version: string): string {
     }
   }
   if (!version) {
-    version = 'v1.4.0'
+    version = '1.4.0'
+  }
+  if (version.startsWith('v')) {
+    version = version.substring(1)
   }
   return version
 }

@@ -25,7 +25,7 @@ test('Version is as provided', () => {
 
 test('Version is not provided, should return default', () => {
   const actual = getKotlinVersion('')
-  expect(actual).toEqual('v1.4.0')
+  expect(actual).toEqual('1.4.0')
 })
 
 // todo: test with mocked filesystem
