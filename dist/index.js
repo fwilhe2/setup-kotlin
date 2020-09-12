@@ -58,7 +58,9 @@ function run() {
                 const x = fs.readdirSync(path);
                 if (x.length != 1) {
                     core.debug("err");
+                    core.debug(x.length.toString());
                 }
+                x.forEach(f => { core.debug(f); });
                 path += x[0];
                 core.debug(path);
                 version = fs.readFileSync(`${path}/latest_known_version.txt`).toString().trim();

@@ -21,7 +21,9 @@ async function run(): Promise<void> {
       const x = fs.readdirSync(path)
       if (x.length != 1) {
         core.debug("err")
+        core.debug(x.length.toString())
       }
+      x.forEach(f => {core.debug(f)})
       path += x[0]
       
       core.debug(path)
