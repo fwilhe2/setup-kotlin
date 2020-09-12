@@ -52,4 +52,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           docker build . -t devenv
+      - run: |
+          docker run --rm -w=/home/runner/work/_actions/fwilhe2/setup-kotlin/main devenv npm test
+      - run: |
           docker run --rm devenv node /home/runner/work/_actions/fwilhe2/setup-kotlin/main/dist/index.js
