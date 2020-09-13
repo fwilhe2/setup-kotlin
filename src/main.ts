@@ -37,7 +37,7 @@ async function run(): Promise<void> {
 run()
 
 export function getKotlinVersion(version: string): string {
-  if (version) {
+  if (version !== '') {
     return validateVersion(version)
   }
 

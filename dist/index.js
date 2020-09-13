@@ -69,7 +69,7 @@ function run() {
 }
 run();
 function getKotlinVersion(version) {
-    if (version) {
+    if (version !== '') {
         return validateVersion(version);
     }
     let directoryOfLatestVersionFile = pathOfLatestVersionFile();

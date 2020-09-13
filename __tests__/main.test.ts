@@ -59,6 +59,6 @@ test('test runs with explicit version', () => {
     env: process.env
   }
   const output = cp.execSync(`node ${ip}`, options).toString().split('\n')
-  // console.log(output)
+  console.log(output)
   expect(output[3]).toMatch(/[Kk]otlin 1.3.72/)
 })
