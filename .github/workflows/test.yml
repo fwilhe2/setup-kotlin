@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-      - 'releases/*'
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -17,6 +17,7 @@ jobs:
           npm run all
       - run: |
           git diff --name-only --exit-code
+
   test:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -25,6 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+
   test-with-arg:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -46,13 +48,14 @@ jobs:
               shell {
                 "uname"()
               }
+
   docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: |
-          docker build . -t devenv
+          docker build . -t action-container-develop
       - run: |
-          docker run --rm -w=/home/runner/work/_actions/fwilhe2/setup-kotlin/main devenv npm test
+          docker run --rm -w=/home/runner/work/_actions/fwilhe2/setup-kotlin/main action-container-develop npm test
       - run: |
-          docker run --rm devenv node /home/runner/work/_actions/fwilhe2/setup-kotlin/main/dist/index.js
+          docker run --rm action-container-develop node /home/runner/work/_actions/fwilhe2/setup-kotlin/main/dist/index.js
