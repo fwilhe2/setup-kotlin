@@ -8,6 +8,8 @@ This can be overriden via the `version` flag.
 
 It allows you to use the `kotlinc` and the `kotlin` tool to compile source code and run scripts.
 
+See [this repo](https://github.com/fwilhe2/improved-enigma) for usage examples.
+
 Usage example:
 
 ```yml
