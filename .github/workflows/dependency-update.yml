@@ -1,0 +1,14 @@
+name: Automated dependency update
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 16 * * 2'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update dependencies
+      run: npm update
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
