@@ -20,4 +20,4 @@ jobs:
         commit-message: "Automated dependency updates"
         body: "Created by running npm audit fix --force and npm update"
         author: "Florian Wilhelm <fwilhelm.wgt+github@gmail.com>"
-        token: PAT
+        token: ${{ secrets.PAT }}
