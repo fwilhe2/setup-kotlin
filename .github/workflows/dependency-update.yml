@@ -15,3 +15,8 @@ jobs:
         npm update
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
+      with:
+        title: "Automated dependency updates"
+        commit-message: "Automated dependency updates"
+        body: "Created by running npm audit fix --force and npm update"
+        author: "Florian Wilhelm <fwilhelm.wgt+github@gmail.com>"
