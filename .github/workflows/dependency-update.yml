@@ -19,4 +19,4 @@ jobs:
         title: "Automated dependency updates"
         commit-message: "Automated dependency updates"
         body: "Created by running npm audit fix --force and npm update"
-        author: "Florian Wilhelm <fwilhelm.wgt+github@gmail.com>"
+        author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
