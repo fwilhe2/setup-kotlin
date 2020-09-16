@@ -1,11 +1,8 @@
 version: 2
 updates:
   - package-ecosystem: 'npm'
-    # Look for `package.json` and `lock` files in the `root` directory
     directory: '/'
     assignees:
       - "fwilhe2"
-    # Check the npm registry for updates every day (weekdays)
     schedule:
-      interval: 'daily'
-      time: "18:00"
+      interval: 'weekly'
