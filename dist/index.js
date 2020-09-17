@@ -36,7 +36,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pathOfLatestVersionFile = exports.getKotlinVersion = void 0;
+exports.pathOfLatestVersionFile = exports.normalizeVersionNumber = exports.validateVersion = exports.getKotlinVersion = void 0;
 const core = __importStar(__webpack_require__(186));
 const tc = __importStar(__webpack_require__(784));
 const exec = __importStar(__webpack_require__(514));
@@ -69,31 +69,42 @@ function run() {
 }
 run();
 function getKotlinVersion(version) {
-    if (!version) {
-        let directoryOfLatestVersionFile = pathOfLatestVersionFile();
-        if (fs.existsSync(directoryOfLatestVersionFile)) {
-            const elementsInDirectory = fs.readdirSync(directoryOfLatestVersionFile);
-            core.debug(`len ${elementsInDirectory.length}`);
-            if (elementsInDirectory.length !== 1) {
-                core.debug(`${directoryOfLatestVersionFile} has ${elementsInDirectory.length} items, expected one. Assuming ${elementsInDirectory[0]} is correct.`);
-            }
-            directoryOfLatestVersionFile += elementsInDirectory[0];
-            core.debug(directoryOfLatestVersionFile.toString());
-            const filePath = `${directoryOfLatestVersionFile}/latest_known_version.txt`;
-            if (fs.existsSync(filePath)) {
-                version = fs.readFileSync(`${directoryOfLatestVersionFile}/latest_known_version.txt`).toString().trim();
-            }
+    if (version !== '') {
+        return validateVersion(version);
+    }
+    let directoryOfLatestVersionFile = pathOfLatestVersionFile();
+    if (fs.existsSync(directoryOfLatestVersionFile)) {
+        const elementsInDirectory = fs.readdirSync(directoryOfLatestVersionFile);
+        core.debug(`len ${elementsInDirectory.length}`);
+        if (elementsInDirectory.length !== 1) {
+            core.debug(`${directoryOfLatestVersionFile} has ${elementsInDirectory.length} items, expected one. Assuming ${elementsInDirectory[0]} is correct.`);
+        }
+        directoryOfLatestVersionFile += elementsInDirectory[0];
+        core.debug(directoryOfLatestVersionFile.toString());
+        const filePath = `${directoryOfLatestVersionFile}/latest_known_version.txt`;
+        if (fs.existsSync(filePath)) {
+            version = fs.readFileSync(`${directoryOfLatestVersionFile}/latest_known_version.txt`).toString().trim();
         }
     }
-    if (!version) {
-        version = '1.4.0';
-    }
-    if (version.startsWith('v')) {
-        version = version.substring(1);
-    }
-    return version;
+    return validateVersion(normalizeVersionNumber(version));
 }
 exports.getKotlinVersion = getKotlinVersion;
+function validateVersion(version) {
+    //todo validate
+    return version;
+}
+exports.validateVersion = validateVersion;
+function normalizeVersionNumber(version) {
+    if (!version) {
+        version = '1.4.0';
+        core.warning('Could not determine Kotlin version to use. This should not happen because a default version should be usable.');
+    }
+    if (!version.startsWith('v')) {
+        return version;
+    }
+    return version.substring(1);
+}
+exports.normalizeVersionNumber = normalizeVersionNumber;
 function pathOfLatestVersionFile() {
     if (IS_WINDOWS) {
         return 'D:/a/_actions/fwilhe2/setup-kotlin/';

@@ -2,7 +2,7 @@
   "name": "setup-kotlin-action",
   "version": "0.0.0",
   "private": false,
-  "description": "TypeScript template action",
+  "description": "Install the Kotlin compiler",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",

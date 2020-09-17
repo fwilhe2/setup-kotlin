@@ -37,34 +37,49 @@ async function run(): Promise<void> {
 run()
 
 export function getKotlinVersion(version: string): string {
-  if (!version) {
-    let directoryOfLatestVersionFile = pathOfLatestVersionFile()
+  if (version !== '') {
+    return validateVersion(version)
+  }
 
-    if (fs.existsSync(directoryOfLatestVersionFile)) {
-      const elementsInDirectory = fs.readdirSync(directoryOfLatestVersionFile)
-      core.debug(`len ${elementsInDirectory.length}`)
-      if (elementsInDirectory.length !== 1) {
-        core.debug(
-          `${directoryOfLatestVersionFile} has ${elementsInDirectory.length} items, expected one. Assuming ${elementsInDirectory[0]} is correct.`
-        )
-      }
-      directoryOfLatestVersionFile += elementsInDirectory[0]
+  let directoryOfLatestVersionFile = pathOfLatestVersionFile()
 
-      core.debug(directoryOfLatestVersionFile.toString())
+  if (fs.existsSync(directoryOfLatestVersionFile)) {
+    const elementsInDirectory = fs.readdirSync(directoryOfLatestVersionFile)
+    core.debug(`len ${elementsInDirectory.length}`)
+    if (elementsInDirectory.length !== 1) {
+      core.debug(
+        `${directoryOfLatestVersionFile} has ${elementsInDirectory.length} items, expected one. Assuming ${elementsInDirectory[0]} is correct.`
+      )
+    }
+    directoryOfLatestVersionFile += elementsInDirectory[0]
 
-      const filePath = `${directoryOfLatestVersionFile}/latest_known_version.txt`
-      if (fs.existsSync(filePath)) {
-        version = fs.readFileSync(`${directoryOfLatestVersionFile}/latest_known_version.txt`).toString().trim()
-      }
+    core.debug(directoryOfLatestVersionFile.toString())
+
+    const filePath = `${directoryOfLatestVersionFile}/latest_known_version.txt`
+    if (fs.existsSync(filePath)) {
+      version = fs.readFileSync(`${directoryOfLatestVersionFile}/latest_known_version.txt`).toString().trim()
     }
   }
+
+  return validateVersion(normalizeVersionNumber(version))
+}
+
+export function validateVersion(version: string): string {
+  //todo validate
+  return version
+}
+
+export function normalizeVersionNumber(version: string): string {
   if (!version) {
     version = '1.4.0'
+    core.warning('Could not determine Kotlin version to use. This should not happen because a default version should be usable.')
   }
-  if (version.startsWith('v')) {
-    version = version.substring(1)
+
+  if (!version.startsWith('v')) {
+    return version
   }
-  return version
+
+  return version.substring(1)
 }
 
 export function pathOfLatestVersionFile(): fs.PathLike {

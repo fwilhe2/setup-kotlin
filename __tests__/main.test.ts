@@ -1,7 +1,7 @@
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
-import {pathOfLatestVersionFile, getKotlinVersion} from '../src/main'
+import {pathOfLatestVersionFile, getKotlinVersion, normalizeVersionNumber} from '../src/main'
 
 const toolDir = path.join(__dirname, 'runner', 'tools')
 const tempDir = path.join(__dirname, 'runner', 'temp')
@@ -20,6 +20,11 @@ test('Ensure we get the expected checkout location on the given OS', () => {
 
 test('Version is as provided', () => {
   const actual = getKotlinVersion('1.2.3')
+  expect(actual).toEqual('1.2.3')
+})
+
+test('normalizeVersionNumber', () => {
+  const actual = normalizeVersionNumber('v1.2.3')
   expect(actual).toEqual('1.2.3')
 })
 
@@ -44,4 +49,15 @@ test('test runs', () => {
   console.log(output)
   console.log(output[output.length - 2])
   expect(output[output.length - 2]).toEqual('234234')
+})
+
+test('test runs with explicit version', () => {
+  process.env['INPUT_SCRIPT'] = 'println(234234)'
+  process.env['INPUT_VERSION'] = '1.3.72'
+  const ip = path.join(__dirname, '..', 'lib', 'main.js')
+  const options: cp.ExecSyncOptions = {
+    env: process.env
+  }
+  const output = cp.execSync(`node ${ip}`, options).toString()
+  expect(output).toMatch(/kotlinc-jvm 1.3.72/)
 })
