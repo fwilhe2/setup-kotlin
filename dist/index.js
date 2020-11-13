@@ -61,7 +61,7 @@ function run() {
                 fs.writeFileSync('script.main.kts', script);
                 const exitCode = yield exec.exec('kotlin', ['script.main.kts']);
                 if (exitCode !== 0) {
-                    core.setFailed("Failed to run script");
+                    core.setFailed('Failed to run script');
                 }
             }
         }
