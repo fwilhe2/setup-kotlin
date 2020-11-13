@@ -27,7 +27,10 @@ async function run(): Promise<void> {
     const script = core.getInput('script')
     if (script) {
       fs.writeFileSync('script.main.kts', script)
-      exec.exec('kotlin', ['script.main.kts'])
+      const exitCode = await exec.exec('kotlin', ['script.main.kts'])
+      if (exitCode !== 0) {
+        core.setFailed('Failed to run script')
+      }
     }
   } catch (error) {
     core.setFailed(error.message)

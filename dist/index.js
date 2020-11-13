@@ -59,7 +59,10 @@ function run() {
             const script = core.getInput('script');
             if (script) {
                 fs.writeFileSync('script.main.kts', script);
-                exec.exec('kotlin', ['script.main.kts']);
+                const exitCode = yield exec.exec('kotlin', ['script.main.kts']);
+                if (exitCode !== 0) {
+                    core.setFailed('Failed to run script');
+                }
             }
         }
         catch (error) {
