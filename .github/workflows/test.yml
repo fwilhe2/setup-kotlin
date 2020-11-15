@@ -59,4 +59,4 @@ jobs:
       - run: |
           docker run --rm -w=/home/runner/work/_actions/fwilhe2/setup-kotlin/main action-container-develop npm test
       - run: |
-          docker run --rm action-container-develop node /home/runner/work/_actions/fwilhe2/setup-kotlin/main/dist/index.js
+          docker run --rm -e INPUT_VERSION=1.4.10 action-container-develop node /home/runner/work/_actions/fwilhe2/setup-kotlin/main/dist/index.js
