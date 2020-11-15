@@ -45,7 +45,7 @@ function run() {
         try {
             const version = core.getInput('version', { required: true });
             if (version.length === 0) {
-                core.setFailed("no version provided");
+                core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.');
             }
             let cachedPath = tc.find('kotlin', version);
             if (!cachedPath) {
