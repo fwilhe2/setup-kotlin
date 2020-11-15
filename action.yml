@@ -7,11 +7,11 @@ branding:
 inputs:
   version:
     required: true
-    description: 'Version of the compiler to download, defaults to latest'
+    description: 'Version of the compiler to download, if not provided a default value is used.'
     default: '1.4.10'
   script:
     required: false
-    description: 'Script to execute'
+    description: 'Script to execute, if so desired. If not provided, no script is executed and Kotlin cli tools can be used in subsequent steps.'
 runs:
   using: 'node12'
   main: 'dist/index.js'
