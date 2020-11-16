@@ -64,14 +64,3 @@ jobs:
               if (getInput("version") != "1.4.10") {
                 throw RuntimeException("Expected version 1.4.10")
               }
-
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          docker build . -t action-container-develop
-      - run: |
-          docker run --rm -w=/home/runner/work/_actions/fwilhe2/setup-kotlin/main action-container-develop npm test
-      - run: |
-          docker run --rm -e INPUT_VERSION=1.4.10 action-container-develop node /home/runner/work/_actions/fwilhe2/setup-kotlin/main/dist/index.js
