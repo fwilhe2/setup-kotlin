@@ -1,4 +1,4 @@
-FROM node:12-buster
+FROM node:14-buster
 
 ENV RUNNER_TEMP /home/runner/work/_temp
 ENV RUNNER_TOOL_CACHE /opt/hostedtoolcache
