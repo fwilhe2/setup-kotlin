@@ -1,4 +1,4 @@
-FROM node:12-buster
+FROM node:14-buster
 
 ENV RUNNER_TEMP /home/runner/work/_temp
 ENV RUNNER_TOOL_CACHE /opt/hostedtoolcache
@@ -21,7 +21,8 @@ RUN apt-get -y update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && mkdir -p /home/runner && echo "runner:x:1000:1000:runner:/home/runner:/bin/bash" >> /etc/passwd \
- && chown -R runner /home/runner
+ && chown -R runner /home/runner \
+ && npm install -g npm@7
 
 RUN mkdir -p /opt/hostedtoolcache; chmod -R 777 /opt
 
