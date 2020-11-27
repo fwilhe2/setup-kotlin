@@ -3,6 +3,9 @@ import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
 import * as fs from 'fs'
 
+const IS_WINDOWS = process.platform === 'win32'
+const IS_DARWIN = process.platform === 'darwin'
+
 async function run(): Promise<void> {
   try {
     const version = core.getInput('version', {required: true})
@@ -21,12 +24,12 @@ async function run(): Promise<void> {
 
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
 
-      const ktNativePath = await tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v1.4.20/kotlin-native-linux-1.4.20.tar.gz`)
-      const ktNativePathExtractedFolder = await tc.extractTar(ktNativePath)
+      const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
+      const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
       nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
     }
 
-    core.addPath(`${nativeCachedPath}/kotlin-native-linux-1.4.20/bin/`)
+    core.addPath(`${nativeCachedPath}/kotlin-native-linux-${version}/bin/`)
     await exec.exec('kotlinc', ['-version'])
     await exec.exec('kotlinc-native', ['-version'])
 
@@ -43,6 +46,24 @@ async function run(): Promise<void> {
     }
   } catch (error) {
     core.setFailed(error.message)
+  }
+}
+
+function nativeDownloadUrl(version: string): string {
+  if (IS_WINDOWS) {
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-linux-${version}.tar.gz`
+  } else if (IS_DARWIN) {
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-macos-${version}.tar.gz`
+  } else {
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-linux-${version}.tar.gz`
+  }
+}
+
+function extractNativeArchive(ktNativePath: string): Promise<string> {
+  if (IS_WINDOWS) {
+    return tc.extractZip(ktNativePath)
+  } else {
+    return tc.extractTar(ktNativePath)
   }
 }
 
