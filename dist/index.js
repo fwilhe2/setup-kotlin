@@ -55,7 +55,7 @@ function run() {
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
                 const ktNativePath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v1.4.20/kotlin-native-linux-1.4.20.tar.gz`);
-                const ktNativePathExtractedFolder = yield tc.extractZip(ktNativePath);
+                const ktNativePathExtractedFolder = yield tc.extractTar(ktNativePath);
                 nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
             }
             core.addPath(`${cachedPath}/kotlinc/bin`);

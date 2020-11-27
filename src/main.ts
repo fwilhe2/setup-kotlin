@@ -22,9 +22,8 @@ async function run(): Promise<void> {
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
 
       const ktNativePath = await tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v1.4.20/kotlin-native-linux-1.4.20.tar.gz`)
-      const ktNativePathExtractedFolder = await tc.extractZip(ktNativePath)
+      const ktNativePathExtractedFolder = await tc.extractTar(ktNativePath)
       nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
-
     }
 
     core.addPath(`${cachedPath}/kotlinc/bin`)
@@ -33,8 +32,6 @@ async function run(): Promise<void> {
     core.addPath(`${nativeCachedPath}/kotlin-native-linux-1.4.20/bin/`)
     await exec.exec('kotlinc', ['-version'])
     await exec.exec('kotlinc-native', ['-version'])
-
-
 
     const script = core.getInput('script')
     if (script) {
