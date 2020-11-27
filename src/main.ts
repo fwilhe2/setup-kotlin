@@ -26,12 +26,13 @@ async function run(): Promise<void> {
       nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
     }
 
-    core.addPath(`${cachedPath}/kotlinc/bin`)
-    await exec.exec('kotlinc', ['-version'])
-
     core.addPath(`${nativeCachedPath}/kotlin-native-linux-1.4.20/bin/`)
     await exec.exec('kotlinc', ['-version'])
     await exec.exec('kotlinc-native', ['-version'])
+
+    core.addPath(`${cachedPath}/kotlinc/bin`)
+    await exec.exec('kotlinc', ['-version'])
+
 
     const script = core.getInput('script')
     if (script) {

@@ -58,11 +58,11 @@ function run() {
                 const ktNativePathExtractedFolder = yield tc.extractTar(ktNativePath);
                 nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
             }
-            core.addPath(`${cachedPath}/kotlinc/bin`);
-            yield exec.exec('kotlinc', ['-version']);
             core.addPath(`${nativeCachedPath}/kotlin-native-linux-1.4.20/bin/`);
             yield exec.exec('kotlinc', ['-version']);
             yield exec.exec('kotlinc-native', ['-version']);
+            core.addPath(`${cachedPath}/kotlinc/bin`);
+            yield exec.exec('kotlinc', ['-version']);
             const script = core.getInput('script');
             if (script) {
                 fs.writeFileSync('script.main.kts', script);
