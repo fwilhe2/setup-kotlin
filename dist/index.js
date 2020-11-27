@@ -48,14 +48,21 @@ function run() {
                 core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.');
             }
             let cachedPath = tc.find('kotlin', version);
+            let nativeCachedPath;
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
                 const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
+                const ktNativePath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v1.4.20/kotlin-native-linux-1.4.20.tar.gz`);
+                const ktNativePathExtractedFolder = yield tc.extractZip(ktNativePath);
+                nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
             }
             core.addPath(`${cachedPath}/kotlinc/bin`);
             yield exec.exec('kotlinc', ['-version']);
+            core.addPath(`${nativeCachedPath}/kotlin-native-linux-1.4.20/bin/`);
+            yield exec.exec('kotlinc', ['-version']);
+            yield exec.exec('kotlinc-native', ['-version']);
             const script = core.getInput('script');
             if (script) {
                 fs.writeFileSync('script.main.kts', script);

@@ -11,6 +11,7 @@ async function run(): Promise<void> {
     }
 
     let cachedPath = tc.find('kotlin', version)
+    let nativeCachedPath
     if (!cachedPath) {
       core.debug(`Could not find Kotlin ${version} in cache, downloading it.`)
       const ktPath = await tc.downloadTool(
@@ -19,10 +20,21 @@ async function run(): Promise<void> {
       const ktPathExtractedFolder = await tc.extractZip(ktPath)
 
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
+
+      const ktNativePath = await tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v1.4.20/kotlin-native-linux-1.4.20.tar.gz`)
+      const ktNativePathExtractedFolder = await tc.extractZip(ktNativePath)
+      nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
+
     }
 
     core.addPath(`${cachedPath}/kotlinc/bin`)
     await exec.exec('kotlinc', ['-version'])
+
+    core.addPath(`${nativeCachedPath}/kotlin-native-linux-1.4.20/bin/`)
+    await exec.exec('kotlinc', ['-version'])
+    await exec.exec('kotlinc-native', ['-version'])
+
+
 
     const script = core.getInput('script')
     if (script) {
