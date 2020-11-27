@@ -33,7 +33,6 @@ async function run(): Promise<void> {
     core.addPath(`${cachedPath}/kotlinc/bin`)
     await exec.exec('kotlinc', ['-version'])
 
-
     const script = core.getInput('script')
     if (script) {
       fs.writeFileSync('script.main.kts', script)
