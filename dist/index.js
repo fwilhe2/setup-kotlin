@@ -40,6 +40,8 @@ const core = __importStar(__webpack_require__(186));
 const tc = __importStar(__webpack_require__(784));
 const exec = __importStar(__webpack_require__(514));
 const fs = __importStar(__webpack_require__(747));
+const IS_WINDOWS = process.platform === 'win32';
+const IS_DARWIN = process.platform === 'darwin';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -54,11 +56,11 @@ function run() {
                 const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
-                const ktNativePath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v1.4.20/kotlin-native-linux-1.4.20.tar.gz`);
-                const ktNativePathExtractedFolder = yield tc.extractTar(ktNativePath);
+                const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
+                const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
                 nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
             }
-            core.addPath(`${nativeCachedPath}/kotlin-native-linux-1.4.20/bin/`);
+            core.addPath(`${nativeCachedPath}/kotlin-native-linux-${version}/bin/`);
             yield exec.exec('kotlinc', ['-version']);
             yield exec.exec('kotlinc-native', ['-version']);
             core.addPath(`${cachedPath}/kotlinc/bin`);
@@ -76,6 +78,25 @@ function run() {
             core.setFailed(error.message);
         }
     });
+}
+function nativeDownloadUrl(version) {
+    if (IS_WINDOWS) {
+        return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-linux-${version}.tar.gz`;
+    }
+    else if (IS_DARWIN) {
+        return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-macos-${version}.tar.gz`;
+    }
+    else {
+        return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-linux-${version}.tar.gz`;
+    }
+}
+function extractNativeArchive(ktNativePath) {
+    if (IS_WINDOWS) {
+        return tc.extractZip(ktNativePath);
+    }
+    else {
+        return tc.extractTar(ktNativePath);
+    }
 }
 run();
 
