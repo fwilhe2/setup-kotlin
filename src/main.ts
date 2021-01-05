@@ -32,21 +32,15 @@ async function run(): Promise<void> {
     }
 
     if (!nativeCachedPath) {
-      core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}`)
+      core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}.`)
     }
 
-    if (IS_WINDOWS) {
-      core.addPath(`${nativeCachedPath}/kotlin-native-windows-${version}/bin/`)
-    } else if (IS_DARWIN) {
-      core.addPath(`${nativeCachedPath}/kotlin-native-macos-${version}/bin/`)
-    } else {
-      core.addPath(`${nativeCachedPath}/kotlin-native-linux-${version}/bin/`)
-    }
-
-    await exec.exec('kotlinc', ['-version'])
-    await exec.exec('kotlinc-native', ['-version'])
-
+    /*
+    The order of addPath call here matter because both archives have a "kotlinc" binary.
+    */
+    core.addPath(`${nativeCachedPath}/kotlin-native-${mapOsName}-${version}/bin/`)
     core.addPath(`${cachedPath}/kotlinc/bin`)
+    await exec.exec('kotlinc-native', ['-version'])
     await exec.exec('kotlinc', ['-version'])
 
     const script = core.getInput('script')
@@ -63,12 +57,16 @@ async function run(): Promise<void> {
 }
 
 function nativeDownloadUrl(version: string): string {
+  return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${mapOsName()}-${version}.${IS_WINDOWS ? 'zip' : 'tar.gz'}`
+}
+
+function mapOsName(): string {
   if (IS_WINDOWS) {
-    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-windows-${version}.zip`
+    return 'windows'
   } else if (IS_DARWIN) {
-    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-macos-${version}.tar.gz`
+    return 'macos'
   } else {
-    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-linux-${version}.tar.gz`
+    return 'linux'
   }
 }
 
