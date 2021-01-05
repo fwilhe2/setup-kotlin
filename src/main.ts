@@ -29,7 +29,14 @@ async function run(): Promise<void> {
       nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
     }
 
-    core.addPath(`${nativeCachedPath}/kotlin-native-linux-${version}/bin/`)
+    if (IS_WINDOWS) {
+      core.addPath(`${nativeCachedPath}/kotlin-native-windows-${version}/bin/`)
+    } else if (IS_DARWIN) {
+      core.addPath(`${nativeCachedPath}/kotlin-native-macos-${version}/bin/`)
+    } else {
+      core.addPath(`${nativeCachedPath}/kotlin-native-linux-${version}/bin/`)
+    }
+
     await exec.exec('kotlinc', ['-version'])
     await exec.exec('kotlinc-native', ['-version'])
 
@@ -51,7 +58,7 @@ async function run(): Promise<void> {
 
 function nativeDownloadUrl(version: string): string {
   if (IS_WINDOWS) {
-    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-linux-${version}.tar.gz`
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-windows-${version}.zip`
   } else if (IS_DARWIN) {
     return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-macos-${version}.tar.gz`
   } else {

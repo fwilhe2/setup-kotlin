@@ -60,7 +60,15 @@ function run() {
                 const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
                 nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
             }
-            core.addPath(`${nativeCachedPath}/kotlin-native-linux-${version}/bin/`);
+            if (IS_WINDOWS) {
+                core.addPath(`${nativeCachedPath}/kotlin-native-windows-${version}/bin/`);
+            }
+            else if (IS_DARWIN) {
+                core.addPath(`${nativeCachedPath}/kotlin-native-macos-${version}/bin/`);
+            }
+            else {
+                core.addPath(`${nativeCachedPath}/kotlin-native-linux-${version}/bin/`);
+            }
             yield exec.exec('kotlinc', ['-version']);
             yield exec.exec('kotlinc-native', ['-version']);
             core.addPath(`${cachedPath}/kotlinc/bin`);
@@ -81,7 +89,7 @@ function run() {
 }
 function nativeDownloadUrl(version) {
     if (IS_WINDOWS) {
-        return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-linux-${version}.tar.gz`;
+        return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-windows-${version}.zip`;
     }
     else if (IS_DARWIN) {
         return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-macos-${version}.tar.gz`;
