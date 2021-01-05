@@ -14,7 +14,7 @@ async function run(): Promise<void> {
     }
 
     let cachedPath = tc.find('kotlin', version)
-    let nativeCachedPath
+    let nativeCachedPath = tc.find('kotlin-native', version)
     if (!cachedPath) {
       core.debug(`Could not find Kotlin ${version} in cache, downloading it.`)
       const ktPath = await tc.downloadTool(
@@ -24,9 +24,15 @@ async function run(): Promise<void> {
 
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
 
-      const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
-      const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
-      nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
+      if (!nativeCachedPath) {
+        const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
+        const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
+        nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
+      }
+    }
+
+    if (!nativeCachedPath) {
+      core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}`)
     }
 
     if (IS_WINDOWS) {

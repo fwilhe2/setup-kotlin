@@ -50,15 +50,20 @@ function run() {
                 core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.');
             }
             let cachedPath = tc.find('kotlin', version);
-            let nativeCachedPath;
+            let nativeCachedPath = tc.find('kotlin-native', version);
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
                 const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
-                const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
-                const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
-                nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
+                if (!nativeCachedPath) {
+                    const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
+                    const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
+                    nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
+                }
+            }
+            if (!nativeCachedPath) {
+                core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}`);
             }
             if (IS_WINDOWS) {
                 core.addPath(`${nativeCachedPath}/kotlin-native-windows-${version}/bin/`);
