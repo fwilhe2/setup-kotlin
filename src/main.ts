@@ -59,7 +59,7 @@ function nativeDownloadUrl(version: string): string {
   }
 }
 
-function extractNativeArchive(ktNativePath: string): Promise<string> {
+async function extractNativeArchive(ktNativePath: string): Promise<string> {
   if (IS_WINDOWS) {
     return tc.extractZip(ktNativePath)
   } else {

@@ -91,12 +91,14 @@ function nativeDownloadUrl(version) {
     }
 }
 function extractNativeArchive(ktNativePath) {
-    if (IS_WINDOWS) {
-        return tc.extractZip(ktNativePath);
-    }
-    else {
-        return tc.extractTar(ktNativePath);
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        if (IS_WINDOWS) {
+            return tc.extractZip(ktNativePath);
+        }
+        else {
+            return tc.extractTar(ktNativePath);
+        }
+    });
 }
 run();
 
