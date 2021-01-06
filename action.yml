@@ -8,7 +8,7 @@ inputs:
   version:
     required: true
     description: 'Version of the compiler to download, if not provided a default value is used.'
-    default: '1.4.20'
+    default: '1.4.21'
   script:
     required: false
     description: 'Script to execute, if so desired. If not provided, no script is executed and Kotlin cli tools can be used in subsequent steps.'
