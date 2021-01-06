@@ -63,20 +63,14 @@ function run() {
                 }
             }
             if (!nativeCachedPath) {
-                core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}`);
+                core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}.`);
             }
-            if (IS_WINDOWS) {
-                core.addPath(`${nativeCachedPath}/kotlin-native-windows-${version}/bin/`);
-            }
-            else if (IS_DARWIN) {
-                core.addPath(`${nativeCachedPath}/kotlin-native-macos-${version}/bin/`);
-            }
-            else {
-                core.addPath(`${nativeCachedPath}/kotlin-native-linux-${version}/bin/`);
-            }
-            yield exec.exec('kotlinc', ['-version']);
-            yield exec.exec('kotlinc-native', ['-version']);
+            /*
+            The order of addPath call here matter because both archives have a "kotlinc" binary.
+            */
+            core.addPath(`${nativeCachedPath}/kotlin-native-${osName}-${version}/bin/`);
             core.addPath(`${cachedPath}/kotlinc/bin`);
+            yield exec.exec('kotlinc-native', ['-version']);
             yield exec.exec('kotlinc', ['-version']);
             const script = core.getInput('script');
             if (script) {
@@ -93,14 +87,18 @@ function run() {
     });
 }
 function nativeDownloadUrl(version) {
+    const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz';
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-${version}.${fileEnding}`;
+}
+function osName() {
     if (IS_WINDOWS) {
-        return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-windows-${version}.zip`;
+        return 'windows';
     }
     else if (IS_DARWIN) {
-        return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-macos-${version}.tar.gz`;
+        return 'macos';
     }
     else {
-        return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-linux-${version}.tar.gz`;
+        return 'linux';
     }
 }
 function extractNativeArchive(ktNativePath) {
