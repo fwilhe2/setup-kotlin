@@ -8,6 +8,9 @@ This can be overriden via the `version` flag.
 
 It allows you to use the `kotlinc` and the `kotlin` tool to compile source code and run scripts.
 
+**Note:** You probably don't need this action if you want to build a Kotlin project using Maven/Gradle as they will download the compiler for you.
+This action is useful if you need or want to use the `kotlin`/`kotlinc`/`kotlinc-native` cli tools.
+
 See [this repo](https://github.com/fwilhe2/improved-enigma) for usage examples.
 
 ## Usage example
