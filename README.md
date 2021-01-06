@@ -1,5 +1,9 @@
 # Setup the [Kotlin™](https://kotlinlang.org/) cli compiler in GitHub Actions
 
+![build-test](https://github.com/fwilhe2/setup-kotlin/workflows/build-test/badge.svg)
+![license](https://img.shields.io/github/license/fwilhe2/setup-kotlin)
+![latest-version](https://img.shields.io/github/v/tag/fwilhe2/setup-kotlin)
+
 This action downloads the Kotlin™ compiler and installs it to the path.
 It won't touch the installed JREs.
 
