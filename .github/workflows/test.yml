@@ -18,6 +18,10 @@ jobs:
           npm run all
       - run: |
           git diff --name-only --exit-code
+      - run: |
+          node dist/index.js
+        env:
+          INPUT_VERSION: 1.4.21
 
   test:
     runs-on: ${{ matrix.os }}

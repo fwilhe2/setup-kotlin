@@ -40,6 +40,8 @@ const core = __importStar(__webpack_require__(186));
 const tc = __importStar(__webpack_require__(784));
 const exec = __importStar(__webpack_require__(514));
 const fs = __importStar(__webpack_require__(747));
+const IS_WINDOWS = process.platform === 'win32';
+const IS_DARWIN = process.platform === 'darwin';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -48,13 +50,27 @@ function run() {
                 core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.');
             }
             let cachedPath = tc.find('kotlin', version);
+            let nativeCachedPath = tc.find('kotlin-native', version);
             if (!cachedPath) {
                 core.debug(`Could not find Kotlin ${version} in cache, downloading it.`);
                 const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
+                if (!nativeCachedPath) {
+                    const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
+                    const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
+                    nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
+                }
             }
+            if (!nativeCachedPath) {
+                core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}.`);
+            }
+            /*
+            The order of addPath call here matter because both archives have a "kotlinc" binary.
+            */
+            core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-${version}/bin`);
             core.addPath(`${cachedPath}/kotlinc/bin`);
+            yield exec.exec('kotlinc-native', ['-version']);
             yield exec.exec('kotlinc', ['-version']);
             const script = core.getInput('script');
             if (script) {
@@ -67,6 +83,31 @@ function run() {
         }
         catch (error) {
             core.setFailed(error.message);
+        }
+    });
+}
+function nativeDownloadUrl(version) {
+    const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz';
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-${version}.${fileEnding}`;
+}
+function osName() {
+    if (IS_WINDOWS) {
+        return 'windows';
+    }
+    else if (IS_DARWIN) {
+        return 'macos';
+    }
+    else {
+        return 'linux';
+    }
+}
+function extractNativeArchive(ktNativePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (IS_WINDOWS) {
+            return tc.extractZip(ktNativePath);
+        }
+        else {
+            return tc.extractTar(ktNativePath);
         }
     });
 }

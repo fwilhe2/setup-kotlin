@@ -3,6 +3,9 @@ import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
 import * as fs from 'fs'
 
+const IS_WINDOWS = process.platform === 'win32'
+const IS_DARWIN = process.platform === 'darwin'
+
 async function run(): Promise<void> {
   try {
     const version = core.getInput('version', {required: true})
@@ -11,6 +14,7 @@ async function run(): Promise<void> {
     }
 
     let cachedPath = tc.find('kotlin', version)
+    let nativeCachedPath = tc.find('kotlin-native', version)
     if (!cachedPath) {
       core.debug(`Could not find Kotlin ${version} in cache, downloading it.`)
       const ktPath = await tc.downloadTool(
@@ -19,9 +23,24 @@ async function run(): Promise<void> {
       const ktPathExtractedFolder = await tc.extractZip(ktPath)
 
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
+
+      if (!nativeCachedPath) {
+        const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
+        const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
+        nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
+      }
     }
 
+    if (!nativeCachedPath) {
+      core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}.`)
+    }
+
+    /*
+    The order of addPath call here matter because both archives have a "kotlinc" binary.
+    */
+    core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-${version}/bin`)
     core.addPath(`${cachedPath}/kotlinc/bin`)
+    await exec.exec('kotlinc-native', ['-version'])
     await exec.exec('kotlinc', ['-version'])
 
     const script = core.getInput('script')
@@ -34,6 +53,29 @@ async function run(): Promise<void> {
     }
   } catch (error) {
     core.setFailed(error.message)
+  }
+}
+
+function nativeDownloadUrl(version: string): string {
+  const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz'
+  return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-${version}.${fileEnding}`
+}
+
+function osName(): string {
+  if (IS_WINDOWS) {
+    return 'windows'
+  } else if (IS_DARWIN) {
+    return 'macos'
+  } else {
+    return 'linux'
+  }
+}
+
+async function extractNativeArchive(ktNativePath: string): Promise<string> {
+  if (IS_WINDOWS) {
+    return tc.extractZip(ktNativePath)
+  } else {
+    return tc.extractTar(ktNativePath)
   }
 }
 

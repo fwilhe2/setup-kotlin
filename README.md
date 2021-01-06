@@ -10,9 +10,9 @@ It allows you to use the `kotlinc` and the `kotlin` tool to compile source code 
 
 See [this repo](https://github.com/fwilhe2/improved-enigma) for usage examples.
 
-Usage example:
+## Usage example
 
-```yml
+```yaml
 name: CI
 on:
   push:
@@ -21,17 +21,38 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: fwilhe2/setup-kotlin@main
-    - run: kotlinc myProgram.kt -include-runtime -d /tmp/hello.jar; java -jar /tmp/hello.jar
-    - run: kotlin myScript.main.kts
+      - uses: actions/checkout@v2
+      - uses: fwilhe2/setup-kotlin@main
+      - run: kotlinc myProgram.kt -include-runtime -d /tmp/hello.jar; java -jar /tmp/hello.jar
+      - run: kotlin myScript.main.kts
+```
+
+### Kotlin/Native
+
+You can also build os-native binaries using `kotlinc-native` as in this example:
+
+```yaml
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04, windows-latest, macos-latest ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: fwilhe2/setup-kotlin@main
+      - run: kotlinc-native foo.kt
+      - run: ./program.exe
+        if: ${{ matrix.os == 'windows-latest' }}
+      - run: ./program.kexe
+        if: ${{ matrix.os != 'windows-latest' }}
 ```
 
 ## Running a script inline
 
 If you provide a string-argument `script`, the action will execute it via [`kotlin-main-kts` script definition jar](https://github.com/Kotlin/kotlin-script-examples/blob/master/jvm/main-kts/MainKts.md), see this example:
 
-```yml
+```yaml
     - uses: fwilhe2/setup-kotlin@main
       with:
         script: |
