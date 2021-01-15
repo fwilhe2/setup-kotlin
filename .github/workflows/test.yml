@@ -22,6 +22,7 @@ jobs:
           node dist/index.js
         env:
           INPUT_VERSION: 1.4.21
+          INPUT_SKIP-NATIVE: true
 
   test:
     runs-on: ${{ matrix.os }}
@@ -68,3 +69,18 @@ jobs:
               if (getInput("version") != "1.4.21") {
                 throw RuntimeException("Expected version 1.4.21")
               }
+
+  test-with-native:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+      - run: echo 'fun main() {println("Hello Kotlin/Native!")}' > hello.kt
+      - run: kotlinc-native hello.kt
+      - run: ./program.exe
+        if: ${{ matrix.os == 'windows-latest' }}
+      - run: ./program.kexe
+        if: ${{ matrix.os != 'windows-latest' }}

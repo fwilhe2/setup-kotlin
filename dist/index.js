@@ -57,7 +57,7 @@ function run() {
                 const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
-                if (!nativeCachedPath && !skipNative) {
+                if (!(nativeCachedPath || skipNative)) {
                     const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
                     const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
                     nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
