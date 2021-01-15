@@ -58,7 +58,7 @@ async function run(): Promise<void> {
 
 function nativeDownloadUrl(version: string): string {
   const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz'
-  return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-${version}.${fileEnding}`
+  return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${osName()}-${version}.${fileEnding}`
 }
 
 function osName(): string {
