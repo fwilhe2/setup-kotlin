@@ -13,6 +13,8 @@ async function run(): Promise<void> {
       core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.')
     }
 
+    const skipNative = core.getInput('skip-native')
+
     let cachedPath = tc.find('kotlin', version)
     let nativeCachedPath = tc.find('kotlin-native', version)
     if (!cachedPath) {
@@ -24,23 +26,21 @@ async function run(): Promise<void> {
 
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
 
-      if (!nativeCachedPath) {
+      if (!nativeCachedPath && !skipNative) {
         const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
         const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
         nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
       }
     }
 
-    if (!nativeCachedPath) {
-      core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}.`)
-    }
-
     /*
     The order of addPath call here matter because both archives have a "kotlinc" binary.
     */
-    core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`)
+    if (!skipNative) {
+      core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`)
+      await exec.exec('kotlinc-native', ['-version'])
+    }
     core.addPath(`${cachedPath}/kotlinc/bin`)
-    await exec.exec('kotlinc-native', ['-version'])
     await exec.exec('kotlinc', ['-version'])
 
     const script = core.getInput('script')

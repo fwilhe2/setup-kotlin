@@ -12,6 +12,7 @@ process.env['RUNNER_TEMP'] = tempDir
 test('test runs with explicit version', () => {
   process.env['INPUT_SCRIPT'] = 'println(234234)'
   process.env['INPUT_VERSION'] = '1.4.21'
+  process.env['INPUT_SKIP-NATIVE'] = 'true'
   const ip = path.join(__dirname, '..', 'lib', 'main.js')
   const options: cp.ExecSyncOptions = {
     env: process.env

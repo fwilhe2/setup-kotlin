@@ -9,6 +9,10 @@ inputs:
     required: true
     description: 'Version of the compiler to download, if not provided a default value is used.'
     default: '1.4.21'
+  skip-native:
+    required: false
+    description: 'Skip download and install of Kotlin/Native tool chain.'
+    default: false
   script:
     required: false
     description: 'Script to execute, if so desired. If not provided, no script is executed and Kotlin cli tools can be used in subsequent steps.'

@@ -49,6 +49,7 @@ function run() {
             if (version.length === 0) {
                 core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.');
             }
+            const skipNative = core.getInput('skip-native');
             let cachedPath = tc.find('kotlin', version);
             let nativeCachedPath = tc.find('kotlin-native', version);
             if (!cachedPath) {
@@ -56,21 +57,20 @@ function run() {
                 const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
-                if (!nativeCachedPath) {
+                if (!nativeCachedPath && !skipNative) {
                     const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
                     const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
                     nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
                 }
             }
-            if (!nativeCachedPath) {
-                core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}.`);
-            }
             /*
             The order of addPath call here matter because both archives have a "kotlinc" binary.
             */
-            core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`);
+            if (!skipNative) {
+                core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`);
+                yield exec.exec('kotlinc-native', ['-version']);
+            }
             core.addPath(`${cachedPath}/kotlinc/bin`);
-            yield exec.exec('kotlinc-native', ['-version']);
             yield exec.exec('kotlinc', ['-version']);
             const script = core.getInput('script');
             if (script) {
