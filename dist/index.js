@@ -59,7 +59,7 @@ function run() {
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
                 core.info(nativeCachedPath);
                 core.info(skipNative);
-                if (!(nativeCachedPath || skipNative)) {
+                if (!nativeCachedPath && !skipNative) {
                     const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
                     const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
                     nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
