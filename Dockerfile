@@ -25,7 +25,6 @@ RUN apt-get -y update \
 
 RUN mkdir -p /opt/hostedtoolcache; chmod -R 777 /opt
 
-COPY . /home/runner/work/_actions/fwilhe2/setup-kotlin/main/
 WORKDIR /home/runner/work/_actions/fwilhe2/setup-kotlin/main
 RUN chown -R runner /home/runner
 
@@ -35,9 +34,6 @@ RUN mkdir -p /home/runner/work/_actions/fwilhe2/setup-kotlin/main
 RUN mkdir -p /home/runner/work/_actions/fwilhe2/setup-kotlin/main.completed
 RUN mkdir -p /home/runner/work/_temp
 RUN mkdir -p /home/runner/work/cautious-barnacle/cautious-barnacle
-
-
-RUN npm install; npm run build; npm run package
 
 WORKDIR /home/runner/work/cautious-barnacle/cautious-barnacle
 RUN echo "node /home/runner/work/_actions/fwilhe2/setup-kotlin/main/dist/index.js" > run.sh; chmod +x run.sh
