@@ -68,7 +68,7 @@ function run() {
             /*
             The order of addPath call here matter because both archives have a "kotlinc" binary.
             */
-            core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-${version}/bin`);
+            core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`);
             core.addPath(`${cachedPath}/kotlinc/bin`);
             yield exec.exec('kotlinc-native', ['-version']);
             yield exec.exec('kotlinc', ['-version']);
