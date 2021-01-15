@@ -68,7 +68,7 @@ function run() {
             /*
             The order of addPath call here matter because both archives have a "kotlinc" binary.
             */
-            core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-${version}/bin`);
+            core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`);
             core.addPath(`${cachedPath}/kotlinc/bin`);
             yield exec.exec('kotlinc-native', ['-version']);
             yield exec.exec('kotlinc', ['-version']);
@@ -88,7 +88,7 @@ function run() {
 }
 function nativeDownloadUrl(version) {
     const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz';
-    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-${version}.${fileEnding}`;
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${osName()}-${version}.${fileEnding}`;
 }
 function osName() {
     if (IS_WINDOWS) {

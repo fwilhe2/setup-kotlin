@@ -38,7 +38,7 @@ async function run(): Promise<void> {
     /*
     The order of addPath call here matter because both archives have a "kotlinc" binary.
     */
-    core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-${version}/bin`)
+    core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`)
     core.addPath(`${cachedPath}/kotlinc/bin`)
     await exec.exec('kotlinc-native', ['-version'])
     await exec.exec('kotlinc', ['-version'])
@@ -58,7 +58,7 @@ async function run(): Promise<void> {
 
 function nativeDownloadUrl(version: string): string {
   const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz'
-  return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-${version}.${fileEnding}`
+  return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${osName()}-${version}.${fileEnding}`
 }
 
 function osName(): string {
