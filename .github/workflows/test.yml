@@ -78,6 +78,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+        with:
+          version: 1.4.21
+      - run: kotlinc -version
+      - run: kotlinc-native -version
       - run: echo 'fun main() {println("Hello Kotlin/Native!")}' > hello.kt
       - run: kotlinc-native hello.kt
       - run: ./program.exe
