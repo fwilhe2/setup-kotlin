@@ -8,20 +8,26 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Get Version Number
-        id: version
-        run: |
-          npm install semver --quiet
-          echo "::set-output name=number::$(node_modules/.bin/semver -i patch $(curl --silent "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest" | jq -r .tag_name))"
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.version.outputs.number }}
-          release_name: Release ${{ steps.version.outputs.number }}
-          draft: false
-          prerelease: false
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Get Version Number
+      uses: fwilhe2/bump-version@main
+      id: bump
+    - run: echo New Version Number ${{ steps.bump.outputs.newVersion }}
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.bump.outputs.newVersion }}
+        release_name: Release ${{ steps.bump.outputs.newVersion }}
+        draft: false
+        prerelease: false
+        body_path: release-notes-draft.md
+    - run: |
+        echo "" > release-notes-draft.md
+        git config --global user.name 'Florian Wilhelm'
+        git config --global user.email 'fwilhelm.wgt+github@gmail.com'
+        git commit -am "Prepare next development iteration"
+        git push
