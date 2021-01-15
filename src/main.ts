@@ -26,6 +26,8 @@ async function run(): Promise<void> {
 
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
 
+      core.info(nativeCachedPath)
+      core.info(skipNative)
       if (!(nativeCachedPath || skipNative)) {
         const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
         const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
