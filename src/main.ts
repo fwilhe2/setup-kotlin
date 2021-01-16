@@ -30,7 +30,8 @@ async function run(): Promise<void> {
       core.info(skipNative)
       if (!nativeCachedPath) {
         core.info('>>1')
-        if (!skipNative) {
+        if (skipNative === 'false') {
+          //fixme string/bool
           core.info('>>2')
 
           const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
