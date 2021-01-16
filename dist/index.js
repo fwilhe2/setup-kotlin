@@ -59,10 +59,14 @@ function run() {
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
                 core.info(nativeCachedPath);
                 core.info(skipNative);
-                if (!nativeCachedPath && !skipNative) {
-                    const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
-                    const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
-                    nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
+                if (!nativeCachedPath) {
+                    core.info(">>1");
+                    if (!skipNative) {
+                        core.info(">>2");
+                        const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
+                        const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
+                        nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
+                    }
                 }
             }
             /*
