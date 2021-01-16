@@ -25,11 +25,6 @@ jobs:
             echo 'Error: Expected kotlinc to be installed.' >&2
             exit 1
           fi
-
-          if [ -x "$(command -v kotlinc-native)" ]; then
-            echo 'Error: Expected kotlinc-native NOT to be installed.' >&2
-            exit 1
-          fi
         env:
           INPUT_VERSION: 1.4.21
           INPUT_INSTALL-NATIVE: false
