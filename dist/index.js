@@ -61,7 +61,8 @@ function run() {
                 core.info(skipNative);
                 if (!nativeCachedPath) {
                     core.info('>>1');
-                    if (skipNative === 'false') { //fixme string/bool
+                    if (skipNative === 'false') {
+                        //fixme string/bool
                         core.info('>>2');
                         const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
                         const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
@@ -72,7 +73,7 @@ function run() {
             /*
             The order of addPath call here matter because both archives have a "kotlinc" binary.
             */
-            if (!skipNative) {
+            if (skipNative === 'false') {
                 core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`);
                 yield exec.exec('kotlinc-native', ['-version']);
             }

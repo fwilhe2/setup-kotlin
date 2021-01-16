@@ -44,7 +44,7 @@ async function run(): Promise<void> {
     /*
     The order of addPath call here matter because both archives have a "kotlinc" binary.
     */
-    if (!skipNative) {
+    if (skipNative === 'false') {
       core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`)
       await exec.exec('kotlinc-native', ['-version'])
     }
