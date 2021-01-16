@@ -29,15 +29,15 @@ async function run(): Promise<void> {
       core.info(nativeCachedPath)
       core.info(skipNative)
       if (!nativeCachedPath) {
-        core.info(">>1")
-      if (!skipNative) {
-        core.info(">>2")
+        core.info('>>1')
+        if (!skipNative) {
+          core.info('>>2')
 
-        const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
-        const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
-        nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
+          const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
+          const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
+          nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
+        }
       }
-    }
     }
 
     /*
