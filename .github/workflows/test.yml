@@ -20,8 +20,14 @@ jobs:
           git diff --name-only --exit-code
       - run: |
           node dist/index.js
+
+          if ! [ -x "$(command -v kotlinc)" ]; then
+            echo 'Error: Expected kotlinc to be installed.' >&2
+            exit 1
+          fi
         env:
           INPUT_VERSION: 1.4.21
+          INPUT_INSTALL-NATIVE: false
 
   test:
     runs-on: ${{ matrix.os }}
@@ -68,3 +74,22 @@ jobs:
               if (getInput("version") != "1.4.21") {
                 throw RuntimeException("Expected version 1.4.21")
               }
+
+  test-with-native:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          version: 1.4.21
+      - run: kotlinc -version
+      - run: kotlinc-native -version
+      - run: echo 'fun main() {println("Hello Kotlin/Native!")}' > hello.kt
+      - run: kotlinc-native hello.kt
+      - run: ./program.exe
+        if: ${{ matrix.os == 'windows-latest' }}
+      - run: ./program.kexe
+        if: ${{ matrix.os != 'windows-latest' }}

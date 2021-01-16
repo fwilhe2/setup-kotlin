@@ -13,6 +13,8 @@ async function run(): Promise<void> {
       core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.')
     }
 
+    const installNative = getInputInstallNative(core.getInput('install-native'))
+
     let cachedPath = tc.find('kotlin', version)
     let nativeCachedPath = tc.find('kotlin-native', version)
     if (!cachedPath) {
@@ -25,22 +27,22 @@ async function run(): Promise<void> {
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
 
       if (!nativeCachedPath) {
-        const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
-        const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
-        nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
+        if (installNative) {
+          const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
+          const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
+          nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
+        }
       }
-    }
-
-    if (!nativeCachedPath) {
-      core.error(`Expected nativeCachedPath to be set, but is ${nativeCachedPath}.`)
     }
 
     /*
     The order of addPath call here matter because both archives have a "kotlinc" binary.
     */
-    core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`)
+    if (installNative) {
+      core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`)
+      await exec.exec('kotlinc-native', ['-version'])
+    }
     core.addPath(`${cachedPath}/kotlinc/bin`)
-    await exec.exec('kotlinc-native', ['-version'])
     await exec.exec('kotlinc', ['-version'])
 
     const script = core.getInput('script')
@@ -54,6 +56,10 @@ async function run(): Promise<void> {
   } catch (error) {
     core.setFailed(error.message)
   }
+}
+
+export function getInputInstallNative(skipNative: string): boolean {
+  return (skipNative || 'true').toLowerCase() === 'true'
 }
 
 function nativeDownloadUrl(version: string): string {
