@@ -22,7 +22,7 @@ jobs:
           node dist/index.js
         env:
           INPUT_VERSION: 1.4.21
-          INPUT_SKIP-NATIVE: true
+          INPUT_install-native: false
 
   test:
     runs-on: ${{ matrix.os }}
@@ -80,7 +80,6 @@ jobs:
       - uses: ./
         with:
           version: 1.4.21
-          skip-native: false
       - run: kotlinc -version
       - run: kotlinc-native -version
       - run: echo 'fun main() {println("Hello Kotlin/Native!")}' > hello.kt

@@ -36,6 +36,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getInputInstallNative = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const tc = __importStar(__nccwpck_require__(784));
 const exec = __importStar(__nccwpck_require__(514));
@@ -49,7 +50,7 @@ function run() {
             if (version.length === 0) {
                 core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.');
             }
-            const skipNative = core.getInput('skip-native');
+            const installNative = getInputInstallNative(core.getInput('install-native'));
             let cachedPath = tc.find('kotlin', version);
             let nativeCachedPath = tc.find('kotlin-native', version);
             if (!cachedPath) {
@@ -57,13 +58,8 @@ function run() {
                 const ktPath = yield tc.downloadTool(`https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', ''));
                 const ktPathExtractedFolder = yield tc.extractZip(ktPath);
                 cachedPath = yield tc.cacheDir(ktPathExtractedFolder, 'kotlin', version);
-                core.info(nativeCachedPath);
-                core.info(skipNative);
                 if (!nativeCachedPath) {
-                    core.info('>>1');
-                    if (skipNative === 'false') {
-                        //fixme string/bool
-                        core.info('>>2');
+                    if (installNative) {
                         const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
                         const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
                         nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
@@ -73,7 +69,7 @@ function run() {
             /*
             The order of addPath call here matter because both archives have a "kotlinc" binary.
             */
-            if (skipNative === 'false') {
+            if (installNative) {
                 core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`);
                 yield exec.exec('kotlinc-native', ['-version']);
             }
@@ -93,6 +89,10 @@ function run() {
         }
     });
 }
+function getInputInstallNative(skipNative) {
+    return (skipNative || 'true').toLowerCase() === 'true';
+}
+exports.getInputInstallNative = getInputInstallNative;
 function nativeDownloadUrl(version) {
     const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz';
     return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${osName()}-${version}.${fileEnding}`;

@@ -13,7 +13,7 @@ async function run(): Promise<void> {
       core.setFailed('No Kotlin version provided. This should not happen because a default version is provided.')
     }
 
-    const skipNative = core.getInput('skip-native')
+    const installNative = getInputInstallNative(core.getInput('install-native'))
 
     let cachedPath = tc.find('kotlin', version)
     let nativeCachedPath = tc.find('kotlin-native', version)
@@ -26,14 +26,8 @@ async function run(): Promise<void> {
 
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
 
-      core.info(nativeCachedPath)
-      core.info(skipNative)
       if (!nativeCachedPath) {
-        core.info('>>1')
-        if (skipNative === 'false') {
-          //fixme string/bool
-          core.info('>>2')
-
+        if (installNative) {
           const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
           const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
           nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
@@ -44,7 +38,7 @@ async function run(): Promise<void> {
     /*
     The order of addPath call here matter because both archives have a "kotlinc" binary.
     */
-    if (skipNative === 'false') {
+    if (installNative) {
       core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`)
       await exec.exec('kotlinc-native', ['-version'])
     }
@@ -62,6 +56,10 @@ async function run(): Promise<void> {
   } catch (error) {
     core.setFailed(error.message)
   }
+}
+
+export function getInputInstallNative(skipNative: string): boolean {
+  return (skipNative || 'true').toLowerCase() === 'true'
 }
 
 function nativeDownloadUrl(version: string): string {
