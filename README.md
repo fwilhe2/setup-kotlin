@@ -69,12 +69,12 @@ If you provide a string-argument `script`, the action will execute it via [`kotl
 
 ### Using `kotlin` as a shell
 
-Starting with version [`1.4.30-RC`](https://github.com/JetBrains/kotlin/releases/tag/v1.4.30-RC), you can configure `kotlin` as a shell in Actions like in this example:
+Starting with version [`1.4.30`](https://github.com/JetBrains/kotlin/releases/tag/v1.4.30), you can configure `kotlin` as a shell in Actions like in this example:
 
 ```yaml
       - uses: fwilhe2/setup-kotlin@main
         with:
-          version: 1.4.30-RC
+          version: 1.4.30
 
       - run: |
             java.io.File(".").listFiles().forEach {it -> println(it.getName().toString())}
