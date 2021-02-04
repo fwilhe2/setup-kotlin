@@ -25,9 +25,3 @@ jobs:
         draft: false
         prerelease: false
         body_path: release-notes-draft.md
-    - run: |
-        echo "" > release-notes-draft.md
-        git config --global user.name 'Florian Wilhelm'
-        git config --global user.email 'fwilhelm.wgt+github@gmail.com'
-        git commit -am "Prepare next development iteration"
-        git push
