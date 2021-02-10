@@ -48,6 +48,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: fwilhe2/setup-kotlin@main
+        with:
+          install-native: true
       - run: kotlinc-native foo.kt
       - run: ./program.exe
         if: ${{ matrix.os == 'windows-latest' }}

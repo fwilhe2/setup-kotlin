@@ -12,7 +12,7 @@ inputs:
   install-native:
     required: false
     description: 'Install Kotlin/Native tool chain (not needed for compiling jvm programs).'
-    default: true
+    default: false
   script:
     required: false
     description: 'Script to execute, if so desired. If not provided, no script is executed and Kotlin cli tools can be used in subsequent steps.'
