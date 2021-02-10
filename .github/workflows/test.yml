@@ -85,6 +85,7 @@ jobs:
       - uses: ./
         with:
           version: 1.4.30
+          install-native: true
       - run: kotlinc -version
       - run: kotlinc-native -version
       - run: echo 'fun main() {println("Hello Kotlin/Native!")}' > hello.kt
