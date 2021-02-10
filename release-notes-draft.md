@@ -1,2 +1,1 @@
 
-Change default value of `install-native` option to `false`. This is due to instabilities with the url for downloading the Kotlin/Native toolchain, cf https://github.com/fwilhe2/setup-kotlin/issues/97, https://github.com/fwilhe2/setup-kotlin/issues/85
