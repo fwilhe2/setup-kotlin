@@ -70,7 +70,7 @@ function run() {
             The order of addPath call here matter because both archives have a "kotlinc" binary.
             */
             if (installNative) {
-                core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${version}/bin`);
+                core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-${version}/bin`);
                 yield exec.exec('kotlinc-native', ['-version']);
             }
             core.addPath(`${cachedPath}/kotlinc/bin`);
@@ -95,7 +95,7 @@ function getInputInstallNative(skipNative) {
 exports.getInputInstallNative = getInputInstallNative;
 function nativeDownloadUrl(version) {
     const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz';
-    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${osName()}-${version}.${fileEnding}`;
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-${version}.${fileEnding}`;
 }
 function osName() {
     if (IS_WINDOWS) {
