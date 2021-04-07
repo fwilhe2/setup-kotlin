@@ -19,3 +19,5 @@ inputs:
 runs:
   using: 'node12'
   main: 'dist/index.js'
+- name: Setup Kotlin
+  uses: fwilhe2/setup-kotlin@0.2.0
