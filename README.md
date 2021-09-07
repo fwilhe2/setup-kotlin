@@ -12,8 +12,11 @@ This can be overriden via the `version` flag.
 
 It allows you to use the `kotlinc` and the `kotlin` tool to compile source code and run scripts.
 
-> :warning: **Note:** You probably don't need this action if you want to build a Kotlin project using Maven/Gradle as they will download the compiler for you.
-This action is useful if you need or want to use the `kotlin`/`kotlinc`/`kotlinc-native` cli tools.
+> :warning: **Note:** You probably don't need this action.
+> GitHub now pre-installs Kotlin, if this works for you, there is no need to use this action.
+> See [this issue](https://github.com/fwilhe2/setup-kotlin/issues/174) for more details.
+> Furthermore, you don't need this action if you want to build a Kotlin project using Maven/Gradle as they will download the compiler for you.
+> This action is useful if you need or want to use the `kotlin`/`kotlinc`/`kotlinc-native` cli tools, if you want to install a specific version of them or if you run workflows in a container/runner where Kotlin is not preinstalled.
 
 See [this repo](https://github.com/fwilhe2/improved-enigma) for usage examples.
 
