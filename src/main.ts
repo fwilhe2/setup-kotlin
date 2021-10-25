@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
 import * as fs from 'fs'
+import * as tc from '@actions/tool-cache'
 
 const IS_WINDOWS = process.platform === 'win32'
 const IS_DARWIN = process.platform === 'darwin'
@@ -54,7 +54,7 @@ async function run(): Promise<void> {
       }
     }
   } catch (error) {
-    core.setFailed(error.message)
+    if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
