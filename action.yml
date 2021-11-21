@@ -8,7 +8,7 @@ inputs:
   version:
     required: true
     description: 'Version of the compiler to download, if not provided a default value is used.'
-    default: '1.4.30'
+    default: '1.6.0'
   install-native:
     required: false
     description: 'Install Kotlin/Native tool chain (not needed for compiling jvm programs).'
