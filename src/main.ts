@@ -39,7 +39,7 @@ async function run(): Promise<void> {
     The order of addPath call here matter because both archives have a "kotlinc" binary.
     */
     if (installNative) {
-      core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-${version}/bin`)
+      core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-x86_64-${version}/bin`)
       await exec.exec('kotlinc-native', ['-version'])
     }
     core.addPath(`${cachedPath}/kotlinc/bin`)
