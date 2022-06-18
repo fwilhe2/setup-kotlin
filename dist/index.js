@@ -99,7 +99,7 @@ function getInputInstallNative(skipNative) {
 exports.getInputInstallNative = getInputInstallNative;
 function nativeDownloadUrl(version) {
     const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz';
-    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-${version}.${fileEnding}`;
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-x86_64-${version}.${fileEnding}`;
 }
 function osName() {
     if (IS_WINDOWS) {
