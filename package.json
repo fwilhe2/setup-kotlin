@@ -11,7 +11,8 @@
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "yarn run build && yarn run format && yarn run lint && yarn run package && yarn test"
+    "all": "yarn run build && yarn run format && yarn run lint && yarn run package && yarn test",
+    "dependency-upgrade": "yarn upgrade && yarn run all"
   },
   "repository": {
     "type": "git",
