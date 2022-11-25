@@ -78,7 +78,7 @@ If you provide a string-argument `script`, the action will execute it via [`kotl
 ```yaml
       - uses: fwilhe2/setup-kotlin@main
         with:
-          version: 1.7.0
+          version: 1.7.20
 
       - run: |
             java.io.File(".").listFiles().forEach {it -> println(it.getName().toString())}
