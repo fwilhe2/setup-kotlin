@@ -26,7 +26,7 @@ jobs:
             exit 1
           fi
         env:
-          INPUT_VERSION: 1.7.0
+          INPUT_VERSION: 1.7.20
           INPUT_INSTALL-NATIVE: false
 
   test:
@@ -47,14 +47,14 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          version: 1.7.0
+          version: 1.7.20
           script: |
               #!/usr/bin/env kotlin
               fun getInput(name: String): String {
                   return System.getenv("INPUT_${name.replace(" ", "_").toUpperCase()}")
               }
-              if (getInput("version") != "1.7.0") {
-                throw RuntimeException("Expected version 1.7.0")
+              if (getInput("version") != "1.7.20") {
+                throw RuntimeException("Expected version 1.7.20")
               }
 
   test-with-arg-default-version:
@@ -71,8 +71,8 @@ jobs:
               fun getInput(name: String): String {
                   return System.getenv("INPUT_${name.replace(" ", "_").toUpperCase()}")
               }
-              if (getInput("version") != "1.7.0") {
-                throw RuntimeException("Expected version 1.7.0")
+              if (getInput("version") != "1.7.20") {
+                throw RuntimeException("Expected version 1.7.20")
               }
 
   test-with-native:
@@ -84,7 +84,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          version: 1.7.0
+          version: 1.7.20
           install-native: true
       - run: kotlinc -version
       - run: kotlinc-native -version
