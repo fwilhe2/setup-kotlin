@@ -11,3 +11,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
