@@ -17,5 +17,5 @@ inputs:
     required: false
     description: 'Script to execute, if so desired. If not provided, no script is executed and Kotlin cli tools can be used in subsequent steps.'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
