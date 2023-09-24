@@ -15,13 +15,17 @@ jobs:
       id: bump
     - run: echo New Version Number ${{ steps.bump.outputs.newVersion }}
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+      run: |
+        gh release create ${{ steps.bump.outputs.newVersion }} --title "Release ${{ steps.bump.outputs.newVersion }}" --notes-file release-notes-draft.md
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.bump.outputs.newVersion }}
-        release_name: Release ${{ steps.bump.outputs.newVersion }}
-        draft: false
-        prerelease: false
-        body_path: release-notes-draft.md
+    - run: |
+        echo "" > release-notes-draft.md
+        if [[ `git status --porcelain` ]]; then
+          git config --global user.name 'Florian Wilhelm'
+          git config --global user.email 'fwilhelm.wgt+github@gmail.com'
+          git commit -am "Prepare next development iteration"
+          git push
+        else
+          echo Release has no changelog
+        fi
