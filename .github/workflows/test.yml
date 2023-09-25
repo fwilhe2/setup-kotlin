@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           yarn
       - run: |
@@ -35,7 +35,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
 
   test-with-arg:
@@ -44,7 +44,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           version: 1.8.10
@@ -63,7 +63,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           script: |
@@ -81,7 +81,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           version: 1.8.10
