@@ -20,7 +20,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -y update \
  && apt-get -y dist-upgrade \
- && apt-get -y install openjdk-11-jdk-headless \
+ && apt-get -y install openjdk-21-jdk-headless \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && mkdir -p /home/runner && echo "runner:x:1000:1000:runner:/home/runner:/bin/bash" >> /etc/passwd \
