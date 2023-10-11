@@ -1,7 +1,7 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.195.0/containers/javascript-node/.devcontainer/base.Dockerfile
 # [Choice] Node.js version (use -bullseye variants on local arm64/Apple Silicon): 16, 14, 12, 16-bullseye, 14-bullseye, 12-bullseye, 16-buster, 14-buster, 12-buster
 ARG VARIANT=20-bookworm
-FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:1.0.0-${VARIANT}
 
 ENV RUNNER_TEMP /home/runner/work/_temp
 ENV RUNNER_TOOL_CACHE /opt/hostedtoolcache
@@ -20,7 +20,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -y update \
  && apt-get -y dist-upgrade \
- && apt-get -y install openjdk-11-jdk-headless \
+ && apt-get -y install openjdk-17-jdk-headless \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && mkdir -p /home/runner && echo "runner:x:1000:1000:runner:/home/runner:/bin/bash" >> /etc/passwd \
