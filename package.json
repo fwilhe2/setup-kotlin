@@ -4,6 +4,7 @@
   "private": false,
   "description": "Install the Kotlin compiler",
   "main": "lib/main.js",
+  "packageManager": "yarn@4.0.1",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",

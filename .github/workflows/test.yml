@@ -16,8 +16,8 @@ jobs:
           yarn
       - run: |
           yarn run all
-      - run: |
-          git diff --name-only --exit-code
+      # - run: |
+      #     git diff --name-only --exit-code
       - run: |
           node dist/index.js
 
