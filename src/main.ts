@@ -80,13 +80,12 @@ function osName(): string {
 
 function osArch(): string {
   switch (os.arch()) {
-    case 'x32':
-    case 'x64':
-      return 'x86_64'
     case 'arm':
     case 'arm64':
       return 'aarch64'
   }
+
+  return 'x86_64'
 }
 
 async function extractNativeArchive(ktNativePath: string): Promise<string> {
