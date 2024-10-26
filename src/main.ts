@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as fs from 'fs'
 import * as tc from '@actions/tool-cache'
+import * as os from 'os'
 
 const IS_WINDOWS = process.platform === 'win32'
 const IS_DARWIN = process.platform === 'darwin'
@@ -39,7 +40,7 @@ async function run(): Promise<void> {
     The order of addPath call here matter because both archives have a "kotlinc" binary.
     */
     if (installNative) {
-      core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-x86_64-${version}/bin`)
+      core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${osArch()}-${version}/bin`)
       await exec.exec('kotlinc-native', ['-version'])
     }
     core.addPath(`${cachedPath}/kotlinc/bin`)
@@ -64,7 +65,7 @@ export function getInputInstallNative(skipNative: string): boolean {
 
 function nativeDownloadUrl(version: string): string {
   const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz'
-  return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${osName()}-x86_64-${version}.${fileEnding}`
+  return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${osName()}-${osArch()}-${version}.${fileEnding}`
 }
 
 function osName(): string {
@@ -74,6 +75,17 @@ function osName(): string {
     return 'macos'
   } else {
     return 'linux'
+  }
+}
+
+function osArch(): string {
+  switch (os.arch()) {
+    case 'x32':
+    case 'x64':
+      return 'x86_64'
+    case 'arm':
+    case 'arm64':
+      return 'aarch64'
   }
 }
 
