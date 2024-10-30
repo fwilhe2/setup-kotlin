@@ -44,6 +44,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const fs = __importStar(__nccwpck_require__(7147));
 const tc = __importStar(__nccwpck_require__(7784));
+const os = __importStar(__nccwpck_require__(2037));
 const IS_WINDOWS = process.platform === 'win32';
 const IS_DARWIN = process.platform === 'darwin';
 function run() {
@@ -73,7 +74,7 @@ function run() {
             The order of addPath call here matter because both archives have a "kotlinc" binary.
             */
             if (installNative) {
-                core.addPath(`${nativeCachedPath}/kotlin-native-${osName()}-x86_64-${version}/bin`);
+                core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${osArch()}-${version}/bin`);
                 yield exec.exec('kotlinc-native', ['-version']);
             }
             core.addPath(`${cachedPath}/kotlinc/bin`);
@@ -99,7 +100,7 @@ function getInputInstallNative(skipNative) {
 exports.getInputInstallNative = getInputInstallNative;
 function nativeDownloadUrl(version) {
     const fileEnding = IS_WINDOWS ? 'zip' : 'tar.gz';
-    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${osName()}-x86_64-${version}.${fileEnding}`;
+    return `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${osName()}-${osArch()}-${version}.${fileEnding}`;
 }
 function osName() {
     if (IS_WINDOWS) {
@@ -111,6 +112,14 @@ function osName() {
     else {
         return 'linux';
     }
+}
+function osArch() {
+    switch (os.arch()) {
+        case 'arm':
+        case 'arm64':
+            return 'aarch64';
+    }
+    return 'x86_64';
 }
 function extractNativeArchive(ktNativePath) {
     return __awaiter(this, void 0, void 0, function* () {
