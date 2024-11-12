@@ -23,6 +23,8 @@ async function run(): Promise<void> {
       const ktPath = await tc.downloadTool(
         `https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip`.replace('\n', '')
       )
+      core.debug(`Downloaded Kotlin ${version} to ${ktPath}`)
+
       const ktPathExtractedFolder = await tc.extractZip(ktPath)
 
       cachedPath = await tc.cacheDir(ktPathExtractedFolder, 'kotlin', version)
@@ -30,6 +32,9 @@ async function run(): Promise<void> {
       if (!nativeCachedPath) {
         if (installNative) {
           const ktNativePath = await tc.downloadTool(nativeDownloadUrl(version))
+          core.debug(`Downloaded Kotlin Native ${version} to ${ktNativePath}`)
+          core.exportVariable('KOTLIN_NATIVE_HOME', ktNativePath)
+
           const ktNativePathExtractedFolder = await extractNativeArchive(ktNativePath)
           nativeCachedPath = await tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version)
         }
@@ -40,10 +45,17 @@ async function run(): Promise<void> {
     The order of addPath call here matter because both archives have a "kotlinc" binary.
     */
     if (installNative) {
-      core.addPath(`${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${osArch()}-${version}/bin`)
+      const nativePath = `${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${osArch()}-${version}`
+      core.addPath(`${nativePath}/bin`)
+      core.exportVariable('KOTLIN_NATIVE_HOME', nativePath)
+      core.debug(`Added ${nativePath}/bin to PATH`)
       await exec.exec('kotlinc-native', ['-version'])
     }
-    core.addPath(`${cachedPath}/kotlinc/bin`)
+
+    const kotlinPath = `${cachedPath}/kotlinc`
+    core.addPath(`${kotlinPath}/bin`)
+    core.exportVariable('KOTLIN_HOME', kotlinPath)
+    core.debug(`Added ${kotlinPath}/bin to PATH`)
     await exec.exec('kotlinc', ['-version'])
 
     const script = core.getInput('script')
