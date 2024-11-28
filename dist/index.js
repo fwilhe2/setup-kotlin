@@ -93,7 +93,7 @@ function run() {
                 core.debug(`Added ${nativePath}${s}bin to PATH`);
                 yield exec.exec('kotlinc-native', ['-version']);
             }
-            const kotlinPath = `${cachedPath}/kotlinc`;
+            const kotlinPath = `${cachedPath}${s}kotlinc`;
             core.addPath(`${kotlinPath}${s}bin`);
             core.exportVariable('KOTLIN_HOME', kotlinPath);
             core.debug(`Added ${kotlinPath}${s}bin to PATH`);
