@@ -22,13 +22,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -67,26 +77,26 @@ function run() {
                     if (installNative) {
                         const ktNativePath = yield tc.downloadTool(nativeDownloadUrl(version));
                         core.debug(`Downloaded Kotlin Native ${version} to ${ktNativePath}`);
-                        core.exportVariable('KOTLIN_NATIVE_HOME', ktNativePath);
                         const ktNativePathExtractedFolder = yield extractNativeArchive(ktNativePath);
                         nativeCachedPath = yield tc.cacheDir(ktNativePathExtractedFolder, 'kotlin-native', version);
                     }
                 }
             }
+            const s = IS_WINDOWS ? '\\' : '/';
             /*
             The order of addPath call here matter because both archives have a "kotlinc" binary.
             */
             if (installNative) {
-                const nativePath = `${nativeCachedPath}/kotlin-native-prebuilt-${osName()}-${osArch()}-${version}`;
-                core.addPath(`${nativePath}/bin`);
+                const nativePath = `${nativeCachedPath}${s}kotlin-native-prebuilt-${osName()}-${osArch()}-${version}`;
+                core.addPath(`${nativePath}${s}bin`);
                 core.exportVariable('KOTLIN_NATIVE_HOME', nativePath);
-                core.debug(`Added ${nativePath}/bin to PATH`);
+                core.debug(`Added ${nativePath}${s}bin to PATH`);
                 yield exec.exec('kotlinc-native', ['-version']);
             }
             const kotlinPath = `${cachedPath}/kotlinc`;
-            core.addPath(`${kotlinPath}/bin`);
+            core.addPath(`${kotlinPath}${s}bin`);
             core.exportVariable('KOTLIN_HOME', kotlinPath);
-            core.debug(`Added ${kotlinPath}/bin to PATH`);
+            core.debug(`Added ${kotlinPath}${s}bin to PATH`);
             yield exec.exec('kotlinc', ['-version']);
             const script = core.getInput('script');
             if (script) {
