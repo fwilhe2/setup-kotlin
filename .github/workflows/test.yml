@@ -17,6 +17,9 @@ jobs:
           yarn
       - run: |
           yarn run all
+        env:
+          INPUT_VERSION: 2.0.21
+          INPUT_INSTALL-NATIVE: false
       - run: |
           git diff --name-only --exit-code
       - run: |
