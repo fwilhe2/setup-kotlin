@@ -31,4 +31,4 @@ jobs:
         fi
         REL_BRANCH=$(echo ${{ steps.bump.outputs.newVersion }} | cut --delimiter "." --fields 1)
         git checkout -b $REL_BRANCH
-        git push origin $REL_BRANCH
+        git push -f origin $REL_BRANCH
