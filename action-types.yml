@@ -1,0 +1,8 @@
+inputs:
+  version:
+    type: string
+  install-native:
+    type: boolean
+  script:
+    type: string
+
