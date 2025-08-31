@@ -25,12 +25,12 @@ test('getInputInstallNative string empty', async () => {
 // shows how the runner will run a javascript action with env / stdout protocol
 test('test runs with explicit version', () => {
   process.env['INPUT_SCRIPT'] = 'println(234234)'
-  process.env['INPUT_VERSION'] = '2.0.21'
+  process.env['INPUT_VERSION'] = '2.2.10'
   process.env['INPUT_install-native'] = 'false'
   const ip = path.join(__dirname, '..', 'lib', 'main.js')
   const options: cp.ExecSyncOptions = {
     env: process.env
   }
   const output = cp.execSync(`node ${ip}`, options).toString()
-  expect(output).toMatch(/kotlinc-jvm 2.0.21/)
+  expect(output).toMatch(/kotlinc-jvm 2.2.10/)
 })
