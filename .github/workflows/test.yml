@@ -62,7 +62,7 @@ jobs:
           script: |
               #!/usr/bin/env kotlin
               fun getInput(name: String): String {
-                  return System.getenv("INPUT_${name.replace(" ", "_").toUpperCase()}")
+                  return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
               }
               if (getInput("version") != "2.2.10") {
                 throw RuntimeException("Expected version 2.2.10")
@@ -80,7 +80,7 @@ jobs:
           script: |
               #!/usr/bin/env kotlin
               fun getInput(name: String): String {
-                  return System.getenv("INPUT_${name.replace(" ", "_").toUpperCase()}")
+                  return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
               }
               if (getInput("version") != "2.2.10") {
                 throw RuntimeException("Expected version 2.2.10")
