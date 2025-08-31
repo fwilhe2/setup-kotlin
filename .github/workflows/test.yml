@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
       - name: Enable Corepack
         run: corepack enable
       - name: Use Node.js 20.x
@@ -25,7 +29,7 @@ jobs:
       - run: |
           yarn run all
         env:
-          INPUT_VERSION: 2.0.21
+          INPUT_VERSION: 2.2.10
           INPUT_INSTALL-NATIVE: false
       - run: |
           git diff --name-only --exit-code
@@ -37,7 +41,7 @@ jobs:
             exit 1
           fi
         env:
-          INPUT_VERSION: 2.0.21
+          INPUT_VERSION: 2.2.10
           INPUT_INSTALL-NATIVE: false
 
   test:
@@ -56,16 +60,20 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
       - uses: ./
         with:
-          version: 2.0.21
+          version: 2.2.10
           script: |
               #!/usr/bin/env kotlin
               fun getInput(name: String): String {
-                  return System.getenv("INPUT_${name.replace(" ", "_").toUpperCase()}")
+                  return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
               }
-              if (getInput("version") != "2.0.21") {
-                throw RuntimeException("Expected version 2.0.21")
+              if (getInput("version") != "2.2.10") {
+                throw RuntimeException("Expected version 2.2.10")
               }
 
   test-with-arg-default-version:
@@ -75,15 +83,19 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
       - uses: ./
         with:
           script: |
               #!/usr/bin/env kotlin
               fun getInput(name: String): String {
-                  return System.getenv("INPUT_${name.replace(" ", "_").toUpperCase()}")
+                  return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
               }
-              if (getInput("version") != "2.0.21") {
-                throw RuntimeException("Expected version 2.0.21")
+              if (getInput("version") != "2.2.10") {
+                throw RuntimeException("Expected version 2.2.10")
               }
 
   test-with-native:
@@ -93,9 +105,13 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
       - uses: ./
         with:
-          version: 2.0.21
+          version: 2.2.10
           install-native: true
       - run: kotlinc -version
       - run: kotlinc-native -version
