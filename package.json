@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Install the Kotlin compiler",
   "main": "lib/main.js",
+  "packageManager": "yarn@4.1.0",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
