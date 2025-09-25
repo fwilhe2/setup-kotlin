@@ -19,10 +19,10 @@ jobs:
           java-version: '21'
       - name: Enable Corepack
         run: corepack enable
-      - name: Use Node.js 20.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v5
         with:
-          node-version: "20.x"
+          node-version: "22.x"
           cache: 'yarn'
       - run: |
           yarn
