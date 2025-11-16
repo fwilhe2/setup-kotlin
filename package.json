@@ -33,7 +33,7 @@
     "@actions/tool-cache": "^2.0.2"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.4.0",
+    "@eslint/compat": "^2.0.0",
     "@types/node": "20",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
