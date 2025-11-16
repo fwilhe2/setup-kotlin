@@ -12,6 +12,28 @@ updates:
     schedule:
       interval: "weekly"
       time: "01:00"
+    groups:
+        # Group all dependencies by with minor or patch version updates into one
+        # PR with production and development dependencies grouped into separate
+        # PRs.
+        # All security updates and major updates are on separate PRs
+        # via https://www.ianlewis.org/til/2025/02/16/dependabot-groups
+        production-dependencies:
+            dependency-type: "production"
+            applies-to: "version-updates"
+            patterns:
+                - "*"
+            update-types:
+                - "minor"
+                - "patch"
+        development-dependencies:
+            dependency-type: "development"
+            applies-to: "version-updates"
+            patterns:
+                - "*"
+            update-types:
+                - "minor"
+                - "patch"
     ignore:
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
