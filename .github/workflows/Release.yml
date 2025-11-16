@@ -10,25 +10,15 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
+
     - name: Get Version Number
       uses: fwilhe2/bump-version@main
       id: bump
+
     - run: echo New Version Number ${{ steps.bump.outputs.newVersion }}
+
     - name: Create Release
       run: |
-        gh release create ${{ steps.bump.outputs.newVersion }} --title "Release ${{ steps.bump.outputs.newVersion }}" --notes-file release-notes-draft.md
+        gh release create ${{ steps.bump.outputs.newVersion }} --title "Release ${{ steps.bump.outputs.newVersion }}" --generate-notes
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - run: |
-        echo "" > release-notes-draft.md
-        if [[ `git status --porcelain` ]]; then
-          git config --global user.name 'Florian Wilhelm'
-          git config --global user.email 'fwilhelm.wgt+github@gmail.com'
-          git commit -am "Prepare next development iteration"
-          git push
-        else
-          echo Release has no changelog
-        fi
-        REL_BRANCH=$(echo ${{ steps.bump.outputs.newVersion }} | cut --delimiter "." --fields 1)
-        git checkout -b $REL_BRANCH
-        git push -f origin $REL_BRANCH
