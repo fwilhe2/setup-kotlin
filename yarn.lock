@@ -5530,7 +5530,7 @@ __metadata:
   resolution: "setup-kotlin-action@workspace:."
   dependencies:
     "@actions/core": "npm:^2.0.1"
-    "@actions/exec": "npm:^1.1.1"
+    "@actions/exec": "npm:^2.0.0"
     "@actions/tool-cache": "npm:^2.0.2"
     "@eslint/compat": "npm:^2.0.0"
     "@types/node": "npm:20"
