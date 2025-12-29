@@ -31,7 +31,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - uses: fwilhe2/setup-kotlin@main
       - run: kotlinc myProgram.kt -include-runtime -d /tmp/hello.jar; java -jar /tmp/hello.jar
       - run: kotlin myScript.main.kts
@@ -49,7 +49,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - uses: fwilhe2/setup-kotlin@main
         with:
           install-native: true
