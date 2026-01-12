@@ -15,6 +15,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@actions/core@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@actions/core@npm:2.0.2"
+  dependencies:
+    "@actions/exec": "npm:^2.0.0"
+    "@actions/http-client": "npm:^3.0.1"
+  checksum: 10c0/933b03d4aacafc9337b493e7e689376ed1d9e824b37f6c8e008668c75dda3add6ff28c61f4e498831e37229f140d20a37f457de9f5089eca7455f603ad59a945
+  languageName: node
+  linkType: hard
+
 "@actions/exec@npm:^2.0.0":
   version: 2.0.0
   resolution: "@actions/exec@npm:2.0.0"
@@ -5521,7 +5531,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "setup-kotlin-action@workspace:."
   dependencies:
-    "@actions/core": "npm:^2.0.1"
+    "@actions/core": "npm:^2.0.2"
     "@actions/exec": "npm:^2.0.0"
     "@actions/tool-cache": "npm:^3.0.0"
     "@eslint/compat": "npm:^2.0.1"
