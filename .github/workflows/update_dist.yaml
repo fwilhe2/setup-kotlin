@@ -1,0 +1,64 @@
+name: Update dist and push
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Target branch to create/update and push the changes'
+        required: true
+        default: 'update-dist'
+
+permissions:
+  contents: write
+
+jobs:
+  update-dist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ inputs.branch }}
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.x"
+          cache: 'yarn'
+      - run: |
+          yarn
+      - run: |
+          yarn run all
+
+      - name: Show dist changes (for debugging)
+        run: |
+          echo "Files in dist (if any):"
+          ls -la dist || true
+          echo "Git status:"
+          git status --porcelain
+
+      - name: Commit and push dist (if changed)
+        env:
+          TARGET_BRANCH: ${{ inputs.branch }}
+        run: |
+          # Stage all changes under dist
+          git add -A dist || true
+
+          # If there are no staged changes, exit successfully
+          if git diff --cached --quiet; then
+            echo "No changes in dist to commit."
+            exit 0
+          fi
+
+          # Commit and push. Include [skip ci] to avoid triggering CI loops.
+          git commit -m "chore(dist): update dist [skip ci]"
+          git push --set-upstream origin "${TARGET_BRANCH}"
