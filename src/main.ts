@@ -7,7 +7,7 @@ import * as os from 'os'
 const IS_WINDOWS = process.platform === 'win32'
 const IS_DARWIN = process.platform === 'darwin'
 
-async function run(): Promise<void> {
+export async function run(): Promise<void> {
   try {
     const version = core.getInput('version', {required: true})
     if (version.length === 0) {

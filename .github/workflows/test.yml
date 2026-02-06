@@ -8,7 +8,6 @@ on:
       - 'releases/*'
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -17,17 +16,14 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '25'
-      - name: Enable Corepack
-        run: corepack enable
-      - name: Use Node.js 22.x
+      - name: Use Node.js 24.x
         uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
-          cache: 'yarn'
+          node-version: '24.x'
       - run: |
-          yarn
+          npm ci
       - run: |
-          yarn run all
+          npm run all
         env:
           INPUT_VERSION: 2.3.0
           INPUT_INSTALL-NATIVE: false
@@ -68,13 +64,13 @@ jobs:
         with:
           version: 2.3.0
           script: |
-              #!/usr/bin/env kotlin
-              fun getInput(name: String): String {
-                  return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
-              }
-              if (getInput("version") != "2.3.0") {
-                throw RuntimeException("Expected version 2.3.0")
-              }
+            #!/usr/bin/env kotlin
+            fun getInput(name: String): String {
+                return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
+            }
+            if (getInput("version") != "2.3.0") {
+              throw RuntimeException("Expected version 2.3.0")
+            }
 
   test-with-arg-default-version:
     runs-on: ${{ matrix.os }}
@@ -90,13 +86,13 @@ jobs:
       - uses: ./
         with:
           script: |
-              #!/usr/bin/env kotlin
-              fun getInput(name: String): String {
-                  return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
-              }
-              if (getInput("version") != "2.3.0") {
-                throw RuntimeException("Expected version 2.3.0")
-              }
+            #!/usr/bin/env kotlin
+            fun getInput(name: String): String {
+                return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
+            }
+            if (getInput("version") != "2.3.0") {
+              throw RuntimeException("Expected version 2.3.0")
+            }
 
   test-with-native:
     runs-on: ${{ matrix.os }}
@@ -123,7 +119,7 @@ jobs:
         if: ${{ matrix.os != 'windows-latest' }}
 
   validate-typings:
-    runs-on: "ubuntu-latest"
+    runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v6
       - uses: typesafegithub/github-actions-typing@v2

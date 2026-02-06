@@ -27,17 +27,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Enable Corepack
-        run: corepack enable
-      - name: Use Node.js 22.x
+      - name: Use Node.js 24.x
         uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
-          cache: 'yarn'
+          node-version: '24.x'
       - run: |
-          yarn
+          npm ci
       - run: |
-          yarn run all
+          npm run all
 
       - name: Show dist changes (for debugging)
         run: |
