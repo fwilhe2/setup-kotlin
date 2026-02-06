@@ -2,7 +2,7 @@ import {getInputInstallNative} from '../src/main'
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
-import { writeFileSync } from 'fs'
+import {writeFileSync} from 'fs'
 import {expect, test} from '@jest/globals'
 
 const toolDir = path.join('runner', 'tools')
@@ -36,6 +36,4 @@ test('runs with explicit version', () => {
   }
   const output = cp.execSync(`npm run local-action`, options).toString()
   expect(output).toMatch(/kotlinc-jvm 2.3.0/)
-
-  
 })
