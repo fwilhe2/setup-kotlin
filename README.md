@@ -47,7 +47,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v6
       - uses: fwilhe2/setup-kotlin@main
@@ -65,24 +65,25 @@ jobs:
 If you provide a string-argument `script`, the action will execute it via [`kotlin-main-kts` script definition jar](https://github.com/Kotlin/kotlin-script-examples/blob/master/jvm/main-kts/MainKts.md), see this example:
 
 ```yaml
-    - uses: fwilhe2/setup-kotlin@main
-      with:
-        script: |
-            #!/usr/bin/env kotlin
-            //more kotlin script code here
+- uses: fwilhe2/setup-kotlin@main
+  with:
+    script: |
+      #!/usr/bin/env kotlin
+      //more kotlin script code here
 ```
 
 ### Using `kotlin` as a shell
 
- Starting with version [`1.4.30`](https://github.com/JetBrains/kotlin/releases/tag/v1.4.30), you can configure `kotlin` as a shell in Actions like in this example:
-```yaml
-      - uses: fwilhe2/setup-kotlin@main
-        with:
-          version: 2.3.0
+Starting with version [`1.4.30`](https://github.com/JetBrains/kotlin/releases/tag/v1.4.30), you can configure `kotlin` as a shell in Actions like in this example:
 
-      - run: |
-            java.io.File(".").listFiles().forEach {it -> println(it.getName().toString())}
-        shell: kotlin -howtorun .main.kts {0}
+```yaml
+- uses: fwilhe2/setup-kotlin@main
+  with:
+    version: 2.3.0
+
+- run: |
+    java.io.File(".").listFiles().forEach {it -> println(it.getName().toString())}
+  shell: kotlin -howtorun .main.kts {0}
 ```
 
 See https://youtrack.jetbrains.com/issue/KT-43534 and https://github.com/actions/runner/issues/813 for more details.

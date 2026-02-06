@@ -8,17 +8,17 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v6
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-    - name: Get Version Number
-      uses: fwilhe2/bump-version@main
-      id: bump
+      - name: Get Version Number
+        uses: fwilhe2/bump-version@main
+        id: bump
 
-    - run: echo New Version Number ${{ steps.bump.outputs.newVersion }}
+      - run: echo New Version Number ${{ steps.bump.outputs.newVersion }}
 
-    - name: Create Release
-      run: |
-        gh release create ${{ steps.bump.outputs.newVersion }} --title "Release ${{ steps.bump.outputs.newVersion }}" --generate-notes
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        run: |
+          gh release create ${{ steps.bump.outputs.newVersion }} --title "Release ${{ steps.bump.outputs.newVersion }}" --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
