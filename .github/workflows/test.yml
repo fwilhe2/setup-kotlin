@@ -23,7 +23,7 @@ jobs:
       - run: |
           npm ci
       - run: |
-          npm run all local-action
+          npm run all
         env:
           INPUT_VERSION: 2.3.0
           INPUT_INSTALL-NATIVE: false
