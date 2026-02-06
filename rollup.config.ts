@@ -1,5 +1,4 @@
-// See: https://rollupjs.org/introduction/
-
+// rollup.config.ts
 import commonjs from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
@@ -7,12 +6,21 @@ import typescript from '@rollup/plugin-typescript'
 const config = {
   input: 'src/index.ts',
   output: {
-    esModule: true,
     file: 'dist/index.js',
     format: 'es',
-    sourcemap: true
+    sourcemap: true,
+    inlineDynamicImports: true
   },
-  plugins: [typescript(), nodeResolve({preferBuiltins: true}), commonjs()]
+  // Ensure 'external' is empty or doesn't include action dependencies
+  external: [],
+  plugins: [
+    typescript(),
+    nodeResolve({
+      preferBuiltins: true,
+      exportConditions: ['node'] // Helps resolve node-specific ESM packages
+    }),
+    commonjs()
+  ]
 }
 
 export default config
