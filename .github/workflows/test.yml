@@ -25,7 +25,7 @@ jobs:
       - run: |
           npm run all
         env:
-          INPUT_VERSION: 2.3.0
+          INPUT_VERSION: 2.3.10
           INPUT_INSTALL-NATIVE: false
       - run: |
           git diff --name-only --exit-code
@@ -37,7 +37,7 @@ jobs:
             exit 1
           fi
         env:
-          INPUT_VERSION: 2.3.0
+          INPUT_VERSION: 2.3.10
           INPUT_INSTALL-NATIVE: false
 
   test:
@@ -70,14 +70,14 @@ jobs:
           node-version: '24.x'
       - uses: ./
         with:
-          version: 2.3.0
+          version: 2.3.10
           script: |
             #!/usr/bin/env kotlin
             fun getInput(name: String): String {
                 return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
             }
-            if (getInput("version") != "2.3.0") {
-              throw RuntimeException("Expected version 2.3.0")
+            if (getInput("version") != "2.3.10") {
+              throw RuntimeException("Expected version 2.3.10")
             }
 
   test-with-arg-default-version:
@@ -102,8 +102,8 @@ jobs:
             fun getInput(name: String): String {
                 return System.getenv("INPUT_${name.replace(" ", "_").uppercase()}")
             }
-            if (getInput("version") != "2.3.0") {
-              throw RuntimeException("Expected version 2.3.0")
+            if (getInput("version") != "2.3.10") {
+              throw RuntimeException("Expected version 2.3.10")
             }
 
   test-with-native:
@@ -123,7 +123,7 @@ jobs:
           node-version: '24.x'
       - uses: ./
         with:
-          version: 2.3.0
+          version: 2.3.10
           install-native: true
       - run: kotlinc -version
       - run: kotlinc-native -version

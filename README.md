@@ -79,7 +79,7 @@ Starting with version [`1.4.30`](https://github.com/JetBrains/kotlin/releases/ta
 ```yaml
 - uses: fwilhe2/setup-kotlin@main
   with:
-    version: 2.3.0
+    version: 2.3.10
 
 - run: |
     java.io.File(".").listFiles().forEach {it -> println(it.getName().toString())}
