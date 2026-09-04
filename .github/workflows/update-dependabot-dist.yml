@@ -1,0 +1,114 @@
+# Dependabot updates package.json and package-lock.json, but it cannot run the
+# package step that refreshes this action's committed bundles. Keep that
+# generated change on the Dependabot branch so the normal dist check can verify
+# it against the resulting commit.
+name: Update Dependabot dist
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  actions: write
+  contents: write
+
+jobs:
+  update-dist:
+    name: Rebuild dist/
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Dependabot branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Rebuild dist/
+        run: npm run package
+
+      - name: Commit rebuilt bundles
+        id: commit
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const { execFileSync } = require('node:child_process');
+
+            const files = execFileSync('git', [
+              'diff', '--name-only', '--', 'dist/main', 'dist/post', 'dist/scw'
+            ], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+
+            if (files.length === 0) {
+              core.info('dist/ is already up to date');
+              return;
+            }
+
+            const head = await github.rest.repos.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: process.env.HEAD_SHA
+            });
+            const blobs = [];
+            for (const path of files) {
+              const content = fs.readFileSync(path).toString('base64');
+              const blob = await github.rest.git.createBlob({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                content,
+                encoding: 'base64'
+              });
+              blobs.push({ path, mode: '100644', type: 'blob', sha: blob.data.sha });
+            }
+
+            const tree = await github.rest.git.createTree({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base_tree: head.data.commit.tree.sha,
+              tree: blobs
+            });
+            const commit = await github.rest.git.createCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              message: 'Rebuild dist for dependency update',
+              tree: tree.data.sha,
+              parents: [process.env.HEAD_SHA]
+            });
+            await github.rest.git.updateRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${context.payload.pull_request.head.ref}`,
+              sha: commit.data.sha,
+              force: false
+            });
+            core.setOutput('updated', 'true');
+
+      - name: Recheck the updated branch
+        if: steps.commit.outputs.updated == 'true'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'check-dist.yml',
+              ref: context.payload.pull_request.head.ref
+            });
