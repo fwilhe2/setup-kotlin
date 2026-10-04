@@ -22,6 +22,19 @@ jobs:
 
       - run: echo New Version Number ${{ steps.bump.outputs.newVersion }}
 
+      # Users reference the action by major version, so that branch has to
+      # point at the most recent release of its version line. It moves before
+      # the release is published, because a re-run after a failure here bumps
+      # to the same number again, while a re-run after the release was already
+      # published would bump past it and leave the branch behind for good.
+      - name: Move the major version branch to the release
+        env:
+          NEW_VERSION: ${{ steps.bump.outputs.newVersion }}
+        run: |
+          major="${NEW_VERSION%%.*}"
+          echo "Moving branch $major to $GITHUB_SHA"
+          git push --force origin "$GITHUB_SHA:refs/heads/$major"
+
       - name: Create Release
         run: |
           gh release create ${{ steps.bump.outputs.newVersion }} --title "Release ${{ steps.bump.outputs.newVersion }}" --generate-notes
